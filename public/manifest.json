@@ -1,0 +1,17 @@
+{
+  "name": "Negócios Ninja",
+  "short_name": "Ninja",
+  "description": "Seu Radar de missões e economia local.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

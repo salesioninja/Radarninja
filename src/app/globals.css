@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-poppins);
+  --font-mono: monospace;
+  --font-heading: var(--font-playfair);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -18,11 +18,6 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -43,88 +38,182 @@
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ═══════════════════════════════════════════
+   TEMA: Escuro Profundo (Agência Ninja Mkd)
+   ═══════════════════════════════════════════ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #090919;
+  --foreground: #e8e8f4;
+  --card: rgba(255,255,255,0.04);
+  --card-foreground: #e8e8f4;
+  --popover: #1a0b2e;
+  --popover-foreground: #e8e8f4;
+  --primary: #23d5ab;
+  --primary-foreground: #090919;
+  --secondary: rgba(255,255,255,0.07);
+  --secondary-foreground: #e8e8f4;
+  --muted: rgba(255,255,255,0.07);
+  --muted-foreground: rgba(232,232,244,0.55);
+  --accent: rgba(35,213,171,0.12);
+  --accent-foreground: #23d5ab;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: rgba(255,255,255,0.1);
+  --input: rgba(255,255,255,0.07);
+  --ring: #23d5ab;
+  --radius: 0.75rem;
+  --sidebar: #1a0b2e;
+  --sidebar-foreground: #e8e8f4;
+  --sidebar-primary: #23d5ab;
+  --sidebar-primary-foreground: #090919;
+  --sidebar-accent: rgba(255,255,255,0.06);
+  --sidebar-accent-foreground: #e8e8f4;
+  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-ring: #23d5ab;
+
+  /* Cores neon custom */
+  --neon-teal: #23d5ab;
+  --neon-blue: #23a6d5;
+  --neon-green: #39FF14;
 }
 
+/* ═══════════════════════════════════════════
+   FUNDO ANIMADO: Mesh Gradient
+   ═══════════════════════════════════════════ */
+@keyframes meshMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.mesh-bg {
+  background: linear-gradient(
+    135deg,
+    #090919 0%,
+    #1a0b2e 25%,
+    #090919 50%,
+    #2d1b4e 75%,
+    #090919 100%
+  );
+  background-size: 400% 400%;
+  animation: meshMove 18s ease infinite;
+}
+
+/* ═══════════════════════════════════════════
+   TIPOGRAFIA
+   ═══════════════════════════════════════════ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-poppins), sans-serif;
   }
-  html {
-    @apply font-sans;
+  h1, h2, h3 {
+    font-family: var(--font-poppins), sans-serif;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   UTILITÁRIOS CUSTOM
+   ═══════════════════════════════════════════ */
+@layer utilities {
+
+  /*
+   * Pilar 1 (Alfabetização Lógica): Como o backdrop-filter: blur() cria vidro?
+   *
+   * O backdrop-filter aplica um filtro de BORRAMENTO nos pixels visíveis
+   * ATRÁS do elemento (não dentro dele). O efeito "vidro" surge porque:
+   *   1. O fundo desfocado perde seus contornos duros, parecendo distante.
+   *   2. O fundo do card (semi-transparente, ex: rgba(255,255,255,0.05)) deixa
+   *      vazar uma fatia desse fundo desfocado, criando profundidade.
+   *
+   * Por que funciona melhor em ambientes ESCUROS?
+   *   Em fundos claros, o blur mistura muita luz e a transparência desaparece.
+   *   Em fundos escuros e coloridos (como nosso mesh-gradient), o blur cria
+   *   um halo de cor suave que contrasta perfeitamente com o card translúcido,
+   *   dando a ilusão de camadas de profundidade (z-layers visuais).
+   *
+   * ATENÇÃO MOBILE (Pilar 3): backdrop-filter é pesado em GPUs móveis.
+   * Mantenha o blur <= 12px para 60fps. Se laggar, use o fallback:
+   *   @media (max-width: 480px) { .glass-dark { backdrop-filter: none; } }
+   */
+
+  .glass-dark {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+  }
+
+  .glass-dark:hover {
+    border-color: rgba(35, 213, 171, 0.45);
+    box-shadow: 0 0 16px 2px rgba(35, 213, 171, 0.12);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  /* Input escuro translúcido */
+  .input-dark {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e8e8f4;
+    backdrop-filter: blur(6px);
+  }
+
+  .input-dark:focus {
+    outline: none;
+    border-color: #23d5ab;
+    box-shadow: 0 0 0 2px rgba(35,213,171,0.2), 0 0 14px 2px rgba(35,213,171,0.1);
+  }
+
+  /* Texto Neon Teal com text-shadow */
+  .text-neon {
+    color: #23d5ab;
+    text-shadow: 0 0 8px rgba(35,213,171,0.6), 0 0 24px rgba(35,213,171,0.25);
+  }
+
+  /* Botão gradiente primário */
+  .btn-gradient {
+    background: linear-gradient(90deg, #23d5ab, #23a6d5);
+    color: #090919;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 18px rgba(35,213,171,0.3);
+    transition: box-shadow 0.2s ease, opacity 0.2s;
+  }
+  .btn-gradient:hover {
+    opacity: 0.92;
+    box-shadow: 0 4px 28px rgba(35,213,171,0.5);
+  }
+
+  /* Badge neon verde */
+  .badge-neon {
+    background: rgba(57,255,20,0.1);
+    color: #39FF14;
+    border: 1px solid rgba(57,255,20,0.4);
+    box-shadow: 0 0 6px rgba(57,255,20,0.2);
+    border-radius: 9999px;
+    font-weight: 600;
+  }
+
+  /* Legado */
+  .font-playfair {
+    font-family: var(--font-playfair), serif;
+  }
+  .glass-card {
+    background-color: rgba(255,255,255,0.05);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+  }
+  .glass {
+    background-color: rgba(255,255,255,0.04);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
   }
 }
