@@ -4,6 +4,7 @@
  */
 
 import { drizzle } from 'drizzle-orm/libsql';
+import { sql } from 'drizzle-orm';
 import { createClient } from '@libsql/client';
 import { businesses, offers } from './schema';
 import * as dotenv from 'dotenv';
@@ -17,7 +18,12 @@ const db = drizzle(client);
 async function seed() {
   console.log('🌱 Seed – Profissionais do Paraná\n');
 
-  console.log('🗑  Limpando dados antigos...');
+  console.log('🗑  Limpando dados antigos e Atualizando Schema...');
+  try {
+    await db.run(sql`ALTER TABLE offers ADD COLUMN image_url text`);
+    await db.run(sql`ALTER TABLE offers ADD COLUMN products text`);
+  } catch (e) {}
+
   await db.delete(offers);
   await db.delete(businesses);
 
@@ -43,9 +49,16 @@ async function seed() {
       latitude: -25.7783,
       longitude: -53.3167,
       offer: {
-        title: "Avaliação Postural Gratuita",
+        title: "Fisioterapia e Osteopatia",
         description: "Saúde | Sessão de diagnóstico para novos pacientes do setor.",
-        points: 120
+        points: 120,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/02/Corrige-desequilibrios-e-promove-a-saude-geral-do-corpo-atraves-de-tecnicas-manuais-eficazes.png",
+        products: [
+          { name: "Pilates", price: 220, image: "https://acessaronline.com.br/wp-content/uploads/2025/10/CLINICA-DE-PILATES.png" },
+          { name: "Osteopatia", price: 200, image: "https://acessaronline.com.br/wp-content/uploads/2026/02/WhatsApp-Image-2024-09-01-at-10.26.55-2.jpeg" },
+          { name: "Fisioterapia", price: 80, image: "https://acessaronline.com.br/wp-content/uploads/2025/10/MEDICA.png" },
+          { name: "Acupuntura", price: 120, image: "https://acessaronline.com.br/wp-content/uploads/2025/10/ACUMPUNTURA.png" }
+        ]
       }
     },
     {
@@ -181,6 +194,8 @@ async function seed() {
       title: item.offer.title,
       description: item.offer.description,
       rewardPoints: item.offer.points,
+      imageUrl: (item.offer as any).imageUrl || null,
+      products: (item.offer as any).products || null,
     });
   }
 

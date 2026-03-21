@@ -75,7 +75,9 @@ export const offers = sqliteTable('offers', {
   businessId: text('business_id').notNull().references(() => businesses.id),
   title: text('title').notNull(),
   description: text('description'),
-  rewardPoints: integer('reward_points').default(100), // Poder Ninja ganho
-  expiresAt: text('expires_at'), // Quando a missão some do radar
+  imageUrl: text('image_url'),
+  products: text('products', { mode: 'json' }).$type<{ name: string; price: number; image: string }[]>(),
+  rewardPoints: integer('reward_points').default(100),
+  expiresAt: text('expires_at'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 });

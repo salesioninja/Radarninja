@@ -5,10 +5,18 @@ import { offers, businesses } from '../db/schema';
 import { eq, like, or } from 'drizzle-orm';
 import { calculateDistance } from '../core/geo/haversine';
 
+export interface Product {
+  name: string;
+  price: number;
+  image: string;
+}
+
 export interface NearbyOffer {
   id: string;
   title: string;
   description: string | null;
+  imageUrl: string | null;
+  products: Product[] | null;
   price: number;
   businessName: string;
   businessAddress: string | null;
@@ -28,6 +36,8 @@ export async function getNearbyOffers(
       id: offers.id,
       title: offers.title,
       description: offers.description,
+      imageUrl: offers.imageUrl,
+      products: offers.products,
       price: offers.rewardPoints,
       businessName: businesses.name,
       businessAddress: businesses.address,
@@ -54,6 +64,8 @@ export async function getNearbyOffers(
     id: offer.id,
     title: offer.title,
     description: offer.description,
+    imageUrl: offer.imageUrl,
+    products: (offer.products ? typeof offer.products === 'string' ? JSON.parse(offer.products) : offer.products : null) as Product[] | null,
     price: offer.price ?? 0,
     businessName: offer.businessName,
     businessAddress: offer.businessAddress,
