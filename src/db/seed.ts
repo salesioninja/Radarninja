@@ -38,7 +38,8 @@ async function seed() {
       offer: {
         title: "Corte e Hidratação Neon",
         description: "Beleza e Estética | Ganhe 20% de desconto na sua primeira visita mencionando o Radar Ninja.",
-        points: 80
+        points: 80,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/1.png"
       }
     },
     {
@@ -71,7 +72,8 @@ async function seed() {
       offer: {
         title: "Desconto em Acessórios",
         description: "Eletrônicos | 15% de desconto em capas e películas protetoras.",
-        points: 50
+        points: 50,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/2.png"
       }
     },
     {
@@ -84,7 +86,8 @@ async function seed() {
       offer: {
         title: "Preço de Atacado",
         description: "Distribuidora e Loja | Condições especiais para compras em volume neste setor.",
-        points: 200
+        points: 200,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/3.png"
       }
     },
     {
@@ -97,7 +100,8 @@ async function seed() {
       offer: {
         title: "Kit Embalagem Econômica",
         description: "Embalagens | Desconto progressivo em bobinas e sacos plásticos.",
-        points: 40
+        points: 40,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/3.png"
       }
     },
     {
@@ -110,7 +114,8 @@ async function seed() {
       offer: {
         title: "Venda Direta de Fábrica",
         description: "Indústria e Confecção | Peças selecionadas com preço de custo para moradores locais.",
-        points: 300
+        points: 300,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/4.png"
       }
     },
     {
@@ -123,7 +128,8 @@ async function seed() {
       offer: {
         title: "Recarga com Desconto",
         description: "Segurança e Incêndio | Traga seu extintor para recarga e ganhe inspeção gratuita.",
-        points: 150
+        points: 150,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/5.png"
       }
     },
     {
@@ -136,7 +142,8 @@ async function seed() {
       offer: {
         title: "Informações de Destino",
         description: "Transporte | Consulte horários e ganhe pontos ao validar seu embarque.",
-        points: 20
+        points: 20,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/6.png"
       }
     },
     {
@@ -149,7 +156,8 @@ async function seed() {
       offer: {
         title: "Orçamento sem Compromisso",
         description: "Metalúrgica | Projetos em ferro e aço com condições facilitadas.",
-        points: 100
+        points: 100,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/7.png"
       }
     },
     {
@@ -162,7 +170,8 @@ async function seed() {
       offer: {
         title: "Oferta em Iluminação LED",
         description: "Materiais Elétricos | Lâmpadas e painéis LED com 10% de desconto.",
-        points: 70
+        points: 70,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/8.png"
       }
     },
     {
@@ -175,7 +184,8 @@ async function seed() {
       offer: {
         title: "Semana de Treino Experimental",
         description: "Saúde e Fitness | 7 dias grátis para novos alunos conhecerem o espaço.",
-        points: 90
+        points: 90,
+        imageUrl: "https://acessaronline.com.br/wp-content/uploads/2026/03/9.png"
       }
     }
   ];

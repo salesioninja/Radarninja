@@ -83,11 +83,11 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
   };
 
   return (
-    <div className="flex flex-col mb-6 p-4 glass-dark rounded-xl bg-[var(--neon-purple)]/5 border-[var(--neon-purple)]/20 border">
-      <h4 className="text-xs font-bold text-[var(--neon-purple)] uppercase tracking-widest flex items-center gap-2 mb-1">
+    <div className="flex flex-col mb-6 p-4 rounded-xl bg-gradient-to-b from-[#E1F5FE] to-[#FFFFFF] border border-[var(--neon-cyan)]/40 shadow-[0_8px_30px_rgba(6,182,212,0.15)] relative z-10 backdrop-blur-md">
+      <h4 className="text-xs font-bold text-sky-900 uppercase tracking-widest flex items-center gap-2 mb-1">
         <Sparkles className="w-4 h-4" /> Chat IA da Agência
       </h4>
-      <p className="text-[10px] text-muted-foreground mb-4">Converse com a Inteligência Artificial Ninja conectada ao N8N.</p>
+      <p className="text-[10px] text-slate-600 mb-4">Converse com a Inteligência Artificial Ninja conectada ao N8N.</p>
       
       {/* Histórico de Mensagens */}
       <div 
@@ -95,7 +95,7 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
         className="flex flex-col gap-3 max-h-56 overflow-y-auto custom-scrollbar mb-4 pr-1"
       >
         {history.length === 0 ? (
-          <div className="text-center text-xs text-muted-foreground opacity-50 my-4 italic">
+          <div className="text-center text-xs text-slate-500 my-4 italic font-medium">
             Nenhuma mensagem. Envie um "Olá" para começar!
           </div>
         ) : (
@@ -103,10 +103,10 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
             <div 
               key={i} 
               className={cn(
-                "max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed",
+                "max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed shadow-sm",
                 msg.role === 'user' 
-                  ? "bg-[var(--neon-purple)] text-white relative items-end self-end rounded-br-sm shadow-[0_0_15px_rgba(157,80,187,0.3)]" 
-                  : "bg-[#1A1A24] text-[#F0F4FF] self-start rounded-bl-sm border border-white/5"
+                  ? "bg-[var(--neon-cyan)] text-white relative items-end self-end rounded-br-sm" 
+                  : "bg-white text-slate-800 self-start rounded-bl-sm border border-slate-200"
               )}
             >
               {msg.content}
@@ -115,7 +115,7 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
         )}
         
         {isSending && (
-          <div className="bg-[#1A1A24] text-[#F0F4FF] self-start rounded-bl-sm border border-white/5 max-w-[85%] rounded-2xl p-3 text-xs flex items-center gap-2">
+          <div className="bg-white text-slate-800 self-start rounded-bl-sm border border-slate-200 shadow-sm max-w-[85%] rounded-2xl p-3 text-xs flex items-center gap-2">
             <Loader2 className="w-3 h-3 animate-spin text-[var(--neon-cyan)]" /> IA processando...
           </div>
         )}
@@ -127,8 +127,8 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
           <Input 
             value={chatMessage}
             onChange={(e) => setChatMessage(e.target.value)}
-            placeholder="Pergunte sobre cursos, links ou contato..."
-            className="input-cyber h-11 pr-12 text-xs bg-black/40"
+            placeholder="Chat Interativo, Escreva Aqui Suas Dúvidas..."
+            className="h-11 pr-12 text-xs bg-white text-slate-800 border-slate-300 placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-[var(--neon-cyan)] rounded-xl shadow-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSend();
             }}
@@ -137,7 +137,7 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
           <Button 
             disabled={isSending || !chatMessage.trim()}
             onClick={handleSend}
-            className="absolute right-1 top-1 bottom-1 h-9 w-9 p-0 rounded-[14px] bg-[var(--neon-purple)] hover:bg-[var(--neon-purple)]/80 text-white flex items-center justify-center transition-all disabled:opacity-50"
+            className="absolute right-1 top-1 bottom-1 h-9 w-9 p-0 rounded-[14px] bg-[var(--neon-cyan)] hover:bg-[var(--neon-cyan)]/80 text-white flex items-center justify-center transition-all disabled:opacity-50"
           >
             <Navigation className="w-4 h-4" style={{ transform: 'rotate(90deg)', marginLeft: '-2px' }} />
           </Button>
@@ -145,13 +145,13 @@ export function OfferChat({ businessId }: { businessId: string | number }) {
 
         {/* Botões de Ação de Arquivo/Mídia baseados no HTML de Referência */}
         <div className="flex items-center gap-2 mt-1">
-          <Button variant="ghost" size="sm" className="h-7 text-[10px] text-muted-foreground hover:text-[var(--neon-cyan)] px-2.5 bg-white/5 rounded-lg border border-white/5">
+          <Button variant="ghost" size="sm" className="h-7 text-[10px] text-slate-600 hover:text-[var(--neon-cyan)] hover:bg-slate-100 px-2.5 bg-white/60 rounded-lg border border-slate-200 shadow-sm transition-colors">
             <Paperclip className="w-3 h-3 mr-1.5" /> Arquivo
           </Button>
-          <Button variant="ghost" size="sm" className="h-7 text-[10px] text-muted-foreground hover:text-[var(--neon-cyan)] px-2.5 bg-white/5 rounded-lg border border-white/5">
+          <Button variant="ghost" size="sm" className="h-7 text-[10px] text-slate-600 hover:text-[var(--neon-cyan)] hover:bg-slate-100 px-2.5 bg-white/60 rounded-lg border border-slate-200 shadow-sm transition-colors">
             <ImageIcon className="w-3 h-3 mr-1.5" /> Mídia
           </Button>
-          <Button variant="ghost" size="sm" className="h-7 text-[10px] text-muted-foreground hover:text-[var(--neon-cyan)] px-2.5 bg-white/5 rounded-lg border border-white/5">
+          <Button variant="ghost" size="sm" className="h-7 text-[10px] text-slate-600 hover:text-[var(--neon-cyan)] hover:bg-slate-100 px-2.5 bg-white/60 rounded-lg border border-slate-200 shadow-sm transition-colors">
             <Mic className="w-3 h-3 mr-1.5" /> Áudio
           </Button>
         </div>
