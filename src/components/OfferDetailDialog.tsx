@@ -20,33 +20,24 @@ export function OfferDetailDialog({ offer, onClose }: { offer: NearbyOffer | nul
 
   return (
     <Dialog open={!!offer} onOpenChange={(o) => (!o && onClose())}>
-      <DialogContent className="sm:max-w-md glass-dark border-[rgba(255,255,255,0.1)] text-[#F0F4FF] overflow-hidden p-0 gap-0">
-        {/* Full Width Header Image */}
-        <div className="w-full h-48 relative bg-black">
-          <img 
-            src={headerImage}
-            alt="Header"
-            className="w-full h-full object-cover opacity-60 mix-blend-screen"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D12] via-[#0D0D12]/40 to-transparent"></div>
+      <DialogContent className="w-[95vw] max-w-2xl h-[90vh] glass-dark border-[rgba(255,255,255,0.1)] text-[#F0F4FF] overflow-hidden p-0 gap-0 flex flex-col sm:rounded-2xl">
+        <div className="p-6 md:p-8 flex-1 overflow-y-auto custom-scrollbar">
           
-          <div className="absolute bottom-4 left-5 right-5">
-            <span className="badge-neon px-2.5 py-0.5 text-[10px] mb-2 inline-block">
+          {/* Novo Header sem Imagem */}
+          <div className="mb-6 pr-8">
+            <span className="badge-neon px-2.5 py-0.5 text-[10px] mb-3 inline-block">
               {offer.price} pts
             </span>
-            <DialogTitle className="text-2xl font-bold text-[#F0F4FF] leading-tight">
+            <DialogTitle className="text-2xl md:text-3xl font-bold text-[#F0F4FF] leading-tight mb-2">
               {offer.title}
             </DialogTitle>
+            <DialogDescription className="text-muted-foreground text-sm font-medium">
+              {offer.businessName}
+              {offer.distance >= 0 && (
+                <span className="text-[var(--neon-cyan)] ml-1.5">• {offer.distance.toFixed(1)}km</span>
+              )}
+            </DialogDescription>
           </div>
-        </div>
-
-        <div className="p-5 max-h-[60vh] overflow-y-auto custom-scrollbar">
-          <DialogDescription className="text-muted-foreground text-sm font-medium mb-4">
-            {offer.businessName}
-            {offer.distance >= 0 && (
-              <span className="text-[var(--neon-cyan)] ml-1.5">• {offer.distance.toFixed(1)}km</span>
-            )}
-          </DialogDescription>
 
           {/* Descrição */}
           {offer.description && (

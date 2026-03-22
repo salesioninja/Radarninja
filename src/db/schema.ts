@@ -80,7 +80,7 @@ export const offers = sqliteTable('offers', {
   title: text('title').notNull(),
   description: text('description'),
   imageUrl: text('image_url'),
-  products: text('products', { mode: 'json' }).$type<{ name: string; price: number; image: string; link?: string }[]>(),
+  products: text('products', { mode: 'json' }).$type<{ name: string; price: number; image?: string; link?: string; buttonText?: string }[]>(),
   rewardPoints: integer('reward_points').default(100),
   expiresAt: text('expires_at'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
