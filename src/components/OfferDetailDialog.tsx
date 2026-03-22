@@ -10,7 +10,7 @@ export function OfferDetailDialog({ offer, onClose }: { offer: NearbyOffer | nul
   const fallbackImage = `https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&auto=format&fit=crop&q=80`;
   const headerImage = offer.imageUrl || fallbackImage;
 
-  const mockProducts = [1, 2, 3].map(item => ({
+  const mockProducts: import('@/actions/get-nearby-offers').Product[] = [1, 2, 3].map(item => ({
     name: `Item Categoria ${item}`,
     price: 99.90 * item,
     image: `https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80`
@@ -68,14 +68,18 @@ export function OfferDetailDialog({ offer, onClose }: { offer: NearbyOffer | nul
                     <Button 
                       size="sm" 
                       onClick={() => {
-                        const priceStr = `R$ ${item.price.toFixed(2).replace('.', ',')}`;
-                        const text = encodeURIComponent(`Olá, tenho interesse no serviço/produto *${item.name}* (${priceStr}) que vi no app Negócios Ninja!`);
-                        const phoneBase = offer.businessPhone ? offer.businessPhone.replace(/\D/g, '') : '5546999765576';
-                        window.open(`https://wa.me/${phoneBase}?text=${text}`, '_blank');
+                        if (item.link && item.link.startsWith('http')) {
+                          window.open(item.link, '_blank');
+                        } else {
+                          const priceStr = `R$ ${item.price.toFixed(2).replace('.', ',')}`;
+                          const text = encodeURIComponent(`Olá, tenho interesse no serviço/produto *${item.name}* (${priceStr}) que vi no app Negócios Ninja!`);
+                          const phoneBase = offer.businessPhone ? offer.businessPhone.replace(/\D/g, '') : '5546999765576';
+                          window.open(`https://wa.me/${phoneBase}?text=${text}`, '_blank');
+                        }
                       }}
                       className="w-full h-7 mt-3 text-[10px] bg-[var(--neon-purple)]/20 hover:bg-[var(--neon-purple)]/40 text-[#F0F4FF] border border-[var(--neon-purple)]/40 rounded-lg"
                     >
-                      Comprar
+                      {item.buttonText || 'Comprar'}
                     </Button>
                   </div>
                 </div>

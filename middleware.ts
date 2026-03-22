@@ -10,11 +10,12 @@ import { auth } from './auth';
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
   
-  if (pathname.startsWith('/dashboard')) {
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
     const role = req.auth?.user?.role;
+    // Administradores ou Business podem acessar o /admin
     if (!req.auth || role !== 'BUSINESS') {
       const loginUrl = new URL('/api/auth/signin', req.url);
-      loginUrl.searchParams.set('callbackUrl', '/dashboard');
+      loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
   }

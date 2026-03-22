@@ -9,6 +9,8 @@ export interface Product {
   name: string;
   price: number;
   image: string;
+  link?: string;
+  buttonText?: string;
 }
 
 export interface NearbyOffer {

@@ -16,5 +16,15 @@ export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
+  const [isMounted, setIsMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return <>{children}</>
+  }
+
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }
