@@ -3,12 +3,8 @@ version: '3.8'
 services:
   radarninja:
     image: ghcr.io/salesioninja/radarninja:latest
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: any
-    ports:
-      - "3050:3000"
+    networks:
+      - ninja_net
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
@@ -16,3 +12,23 @@ services:
       - AUTH_TRUST_HOST=true
       - NEXT_PUBLIC_VAPID_PUBLIC_KEY=${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
       - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.radarninja_app.rule=Host(`radarninja.acessaronline.com.br`)
+        - traefik.http.routers.radarninja_app.entrypoints=websecure
+        - traefik.http.routers.radarninja_app.priority=1
+        - traefik.http.routers.radarninja_app.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.radarninja_app.service=radarninja_app
+        - traefik.http.services.radarninja_app.loadbalancer.server.port=3000
+        - traefik.http.services.radarninja_app.loadbalancer.passHostHeader=1
+
+networks:
+  ninja_net:
+    external: true
+    name: ninja_net
