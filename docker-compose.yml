@@ -2,21 +2,14 @@ version: '3.8'
 
 services:
   radarninja:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # Puxa o DATABASE_URL das variáveis de ambiente da Stack no Portainer para injetar no momento do build
-        - DATABASE_URL=${DATABASE_URL}
-    image: radarninja:latest
-    container_name: radarninja_app
-    restart: unless-stopped
+    image: ghcr.io/salesioninja/radarninja:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
     ports:
-      # Modifique a porta da esquerda para outra caso já esteja usando a 3000 em outra aplicação na máquina
-      # Exemplo: Se usar "3050:3000", a aplicação ficará na porta 3050 da VPS.
       - "3000:3000"
     environment:
-      # O Portainer vai repassar as variaveis do arquivo/painel ENV para dentro do Container 
       - DATABASE_URL=${DATABASE_URL}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - AUTH_SECRET=${AUTH_SECRET}
@@ -27,8 +20,5 @@ services:
       - proxy
 
 networks:
-  # Criei essa rede "proxy" para caso você use NPM (Nginx Proxy Manager) ou Traefik.
-  # Se sua rede principal chama "npm_network" ou algo do tipo, basta mudar esse nome aqui.
   proxy:
-    name: proxy
     external: true
