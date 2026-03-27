@@ -25,16 +25,26 @@ export default function DashboardPage() {
     const address = formData.get('address') as string;
 
     try {
-      await createOfferAction({ title, price, address });
+      const result = await createOfferAction({ title, price, address });
+      
+      if (!result.success) {
+        toast.error('Erro ao publicar', {
+          description: result.error || 'Verifique os dados e tente novamente.',
+        });
+        return;
+      }
+
       toast.success('Oferta publicada!', {
         description: 'Seu estabelecimento agora aparece para clientes na área.',
       });
       router.push('/');
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
       toast.error('Erro ao publicar', {
-        description: error.message || 'Verifique os dados e tente novamente.',
+        description: errorMessage,
       });
     } finally {
+
       setLoading(false);
     }
   }

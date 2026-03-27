@@ -3,6 +3,8 @@ import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Providers } from "@/components/Providers";
+
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -42,9 +44,12 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
-          <Toaster />
+          <Providers>
+            {children}
+            <Toaster />
+          </Providers>
         </ThemeProvider>
+
       </body>
     </html>
   );

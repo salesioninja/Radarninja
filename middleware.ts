@@ -10,10 +10,22 @@ import { auth } from './auth';
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
   
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
+  // 1. ÁREA DE ADMINISTRAÇÃO MÁXIMA (Apenas ADMIN)
+  if (pathname.startsWith('/admin')) {
     const role = req.auth?.user?.role;
-    // Administradores ou Business podem acessar o /admin
-    if (!req.auth || role !== 'BUSINESS') {
+    if (!req.auth || role !== 'ADMIN') {
+      const loginUrl = new URL('/api/auth/signin', req.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      // Aqui poderíamos redirecionar para '/' ou '/unauthorized', 
+      // mas vamos redirecionar para signin para forçar o login correto.
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // 2. ÁREA DE EMPRESAS (BUSINESS ou ADMIN)
+  if (pathname.startsWith('/dashboard')) {
+    const role = req.auth?.user?.role;
+    if (!req.auth || (role !== 'BUSINESS' && role !== 'ADMIN')) {
       const loginUrl = new URL('/api/auth/signin', req.url);
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);

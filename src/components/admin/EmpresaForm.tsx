@@ -64,10 +64,12 @@ export function EmpresaForm({ initialData, empresaId }: EmpresaFormProps) {
       image: p.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff',
       link: p.link || '',
       buttonText: p.buttonText || 'Comprar'
-    })) || null,
+    })) || [],
     price: 100, // Pontos Padrão
     businessName: formValues.name || 'Nome da Empresa',
+    category: formValues.category || null,
     businessAddress: formValues.address || 'Endereço da Empresa',
+
     businessPhone: formValues.phone || '4699999999',
     businessLat: formValues.latitude || 0,
     businessLng: formValues.longitude || 0,
@@ -78,7 +80,7 @@ export function EmpresaForm({ initialData, empresaId }: EmpresaFormProps) {
     setLoading(true);
     try {
       if (empresaId) {
-        const res = await updateEmpresaAction(empresaId, data);
+        const res = await updateEmpresaAction({ offerId: empresaId, data });
         if (res.success) { 
           toast.success('Empresa atualizada com sucesso!'); 
           router.push('/admin/empresas'); 

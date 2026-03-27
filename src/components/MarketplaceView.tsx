@@ -21,6 +21,7 @@ export default function MarketplaceView() {
   const [loading, setLoading] = useState(true);
   const [selectedOffer, setSelectedOffer] = useState<NearbyOffer | null>(null);
   const [categoryFilter, setCategoryFilter] = useState('Todas');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const loadOffers = useCallback(async (lat?: number, lng?: number) => {
     setLoading(true);
@@ -50,16 +51,61 @@ export default function MarketplaceView() {
   }, [loadOffers]);
 
   const filteredOffers = offers.filter(offer => {
-    if (categoryFilter === 'Todas') return true;
+    // 1. Category Filter
+    let categoryMatch = true;
+    if (categoryFilter !== 'Todas') {
+      const desc = (offer.description || '').toLowerCase();
+      const bName = (offer.businessName || '').toLowerCase();
+      const catLower = (offer.category || '').toLowerCase();
+      const filterLower = categoryFilter.toLowerCase();
+      
+      if (filterLower === 'alimentação') categoryMatch = desc.includes('alimentação') || desc.includes('restaurante') || desc.includes('pizza') || bName.includes('churrascaria') || bName.includes('supermercado') || catLower.includes('alimentação');
+      else if (filterLower === 'serviços') categoryMatch = desc.includes('serviço') || desc.includes('salão') || desc.includes('estética') || bName.includes('salão') || bName.includes('engenharia') || bName.includes('chaveiro') || catLower.includes('serviço');
+      else if (filterLower === 'varejo') categoryMatch = desc.includes('varejo') || desc.includes('loja') || desc.includes('comércio') || bName.includes('show') || bName.includes('materiais') || desc.includes('roupa') || catLower.includes('varejo');
+      else if (filterLower === 'lazer') categoryMatch = desc.includes('lazer') || desc.includes('passeio') || desc.includes('diversão') || catLower.includes('lazer');
+      else categoryMatch = false;
+    }
+    
+    if (!categoryMatch) return false;
+
+    // 2. Search Query Filter
+    if (!searchQuery.trim()) return true;
+
+    const query = searchQuery.toLowerCase().trim();
     const desc = (offer.description || '').toLowerCase();
     const bName = (offer.businessName || '').toLowerCase();
-    const filterLower = categoryFilter.toLowerCase();
+    const title = (offer.title || '').toLowerCase();
+    const category = (offer.category || '').toLowerCase();
     
-    if (filterLower === 'alimentação') return desc.includes('alimentação') || desc.includes('restaurante') || desc.includes('pizza') || bName.includes('churrascaria') || bName.includes('supermercado');
-    if (filterLower === 'serviços') return desc.includes('serviço') || desc.includes('salão') || desc.includes('estética') || bName.includes('salão') || bName.includes('engenharia') || bName.includes('chaveiro');
-    if (filterLower === 'varejo') return desc.includes('varejo') || desc.includes('loja') || desc.includes('comércio') || bName.includes('show') || bName.includes('materiais') || desc.includes('roupa');
-    if (filterLower === 'lazer') return desc.includes('lazer') || desc.includes('passeio') || desc.includes('diversão');
-    return true;
+    const searchTarget = `${bName} ${title} ${desc} ${category}`;
+    
+    // Synonym mapping
+    const synonyms: Record<string, string[]> = {
+      'pintor': ['pintor', 'tinta', 'tintas', 'pinturas', 'pintura'],
+      'tinta': ['pintor', 'tinta', 'tintas', 'pinturas', 'pintura'],
+      'tintas': ['pintor', 'tinta', 'tintas', 'pinturas', 'pintura'],
+      'pinturas': ['pintor', 'tinta', 'tintas', 'pinturas', 'pintura'],
+      'pintura': ['pintor', 'tinta', 'tintas', 'pinturas', 'pintura'],
+    };
+
+    // Check if any word in query matches synonyms
+    const queryWords = query.split(/\s+/);
+    let matchedBySynonym = false;
+
+    for (const word of queryWords) {
+      if (synonyms[word]) {
+         const hasSynonymMatch = synonyms[word].some(syn => searchTarget.includes(syn));
+         if (hasSynonymMatch) {
+            matchedBySynonym = true;
+            break;
+         }
+      }
+    }
+
+    if (matchedBySynonym) return true;
+
+    // Default: Check if all typed words are in the search target
+    return queryWords.every(word => searchTarget.includes(word));
   });
 
   return (
@@ -77,8 +123,20 @@ export default function MarketplaceView() {
 
       <main className="max-w-6xl mx-auto px-6 pb-24">
 
-        {/* ═══ CATEGORY FILTER ═══ */}
-        <CategoryFilter selected={categoryFilter} onSelect={setCategoryFilter} />
+        {/* ═══ FILTERS & SEARCH ═══ */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6 z-20">
+          <CategoryFilter selected={categoryFilter} onSelect={setCategoryFilter} />
+          
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar profissionais, lojas, serviços (ex: pintor, restaurante)..." 
+              className="pl-11 h-[46px] rounded-xl input-cyber w-full bg-[#0D0D12]/60 border border-[var(--neon-purple)]/30 text-white placeholder:text-muted-foreground focus-visible:ring-[var(--neon-cyan)] transition-all"
+            />
+          </div>
+        </div>
 
         {/* ═══ OFFER GRID ═══ */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

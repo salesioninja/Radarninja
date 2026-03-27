@@ -18,8 +18,12 @@ export const users = sqliteTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
-  role: text("role", { enum: ["USER", "BUSINESS"] }).default("USER"),
+  role: text("role", { enum: ["USER", "BUSINESS", "ADMIN"] }).default("USER"),
+  phone: text("phone"),
+  password: text("password"),
 });
+
+
 
 export const accounts = sqliteTable(
   "account",
@@ -76,12 +80,22 @@ export const businesses = sqliteTable('businesses', {
 // Entidade: Missões Ocultas espalhadas geograficamente
 export const offers = sqliteTable('offers', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-  businessId: text('business_id').notNull().references(() => businesses.id),
+  businessId: text('business_id').notNull().references(() => businesses.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
   description: text('description'),
   imageUrl: text('image_url'),
   products: text('products', { mode: 'json' }).$type<{ name: string; price: number; image?: string; link?: string; buttonText?: string }[]>(),
   rewardPoints: integer('reward_points').default(100),
   expiresAt: text('expires_at'),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+// Inscrições Web Push
+export const pushSubscriptions = sqliteTable('push_subscriptions', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  endpoint: text('endpoint').notNull(),
+  p256dh: text('p256dh').notNull(),
+  auth: text('auth').notNull(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 });

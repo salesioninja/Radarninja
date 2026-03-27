@@ -1,11 +1,15 @@
 'use client';
 
-import { User, Camera, Star, Gift, LogOut } from 'lucide-react';
+import { User, Camera, Star, Gift, LogOut, Bell, BellOff, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { usePushNotification } from '@/hooks/use-push-notification';
+import { cn } from '@/lib/utils';
 // Import auth from next-auth se estiver usando cliente, caso contrário usa mock.
 // import { signOut } from 'next-auth/react';
 
 export function ProfileView() {
+  const { isSupported, subscription, subscribe, unsubscribe, loading: pushLoading } = usePushNotification();
+
   return (
     <div className="min-h-screen mesh-bg text-[#F0F4FF] font-sans pb-24 overflow-y-auto custom-scrollbar">
       <div className="max-w-2xl mx-auto px-4 pt-12 space-y-6">
@@ -39,6 +43,47 @@ export function ProfileView() {
             <span className="text-white/50 text-xs font-medium">pontos</span>
           </div>
         </div>
+
+        {/* ═══ NOTIFICATIONS SETTINGS ═══ */}
+        {isSupported && (
+          <div className="glass-dark rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={cn(
+                  "w-10 h-10 rounded-xl flex items-center justify-center",
+                  subscription ? "bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)]" : "bg-white/5 text-white/30"
+                )}>
+                  {subscription ? <Bell className="w-5 h-5" /> : <BellOff className="w-5 h-5" />}
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Notificações Push</h3>
+                  <p className="text-[11px] text-white/40">Receber alertas de promoções</p>
+                </div>
+              </div>
+              
+              <Button
+                size="sm"
+                variant={subscription ? "outline" : "default"}
+                disabled={pushLoading}
+                onClick={subscription ? unsubscribe : subscribe}
+                className={cn(
+                  "rounded-lg h-9 px-4 text-xs font-bold transition-all",
+                  subscription 
+                    ? "border-[var(--neon-cyan)]/20 text-[var(--neon-cyan)] hover:bg-[var(--neon-cyan)]/10" 
+                    : "bg-[var(--neon-cyan)] text-[#0D0D12] hover:bg-[var(--neon-cyan)]/90"
+                )}
+              >
+                {pushLoading ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : subscription ? (
+                  'Desativar'
+                ) : (
+                  'Ativar'
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* ═══ STATS GRID ═══ */}
         <div className="grid grid-cols-2 gap-4">

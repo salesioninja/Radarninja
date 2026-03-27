@@ -1,6 +1,6 @@
 import { getAdminEmpresas, deleteEmpresaAction } from '@/actions/admin-empresa';
 import { Button } from '@/components/ui/button';
-import { Store, Plus, Edit2, Trash2 } from 'lucide-react';
+import { Store, Plus, Edit2, Trash2, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { revalidatePath } from 'next/cache';
 
@@ -25,11 +25,18 @@ export default async function AdminEmpresasListPage() {
               <p className="text-white/50 text-sm mt-1">Gerencie os estabelecimentos cadastrados no Radar.</p>
             </div>
           </div>
-          <Link href="/admin/empresas/nova">
-            <Button className="h-11 px-6 rounded-xl btn-gradient font-bold shadow-lg shadow-[var(--neon-purple)]/20 hover:shadow-[var(--neon-purple)]/40 transition-all flex items-center gap-2">
-              <Plus className="w-4 h-4" /> Nova Empresa
-            </Button>
-          </Link>
+          <div className="flex items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
+            <Link href="/admin/notificacoes">
+              <Button variant="outline" className="h-11 px-6 rounded-xl glass-dark border-[var(--neon-cyan)] text-[var(--neon-cyan)] hover:bg-[var(--neon-cyan)]/10 font-bold shadow-lg transition-all flex items-center gap-2">
+                <Bell className="w-4 h-4" /> Notificações
+              </Button>
+            </Link>
+            <Link href="/admin/empresas/nova">
+              <Button className="h-11 px-6 rounded-xl btn-gradient font-bold shadow-lg shadow-[var(--neon-purple)]/20 hover:shadow-[var(--neon-purple)]/40 transition-all flex items-center gap-2">
+                <Plus className="w-4 h-4" /> Nova Empresa
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="glass-dark rounded-3xl p-6 sm:p-8 relative overflow-hidden">

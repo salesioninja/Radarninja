@@ -21,6 +21,7 @@ export interface NearbyOffer {
   products: Product[] | null;
   price: number;
   businessName: string;
+  category: string | null;
   businessAddress: string | null;
   businessPhone: string | null;
   businessLat: number;
@@ -42,6 +43,7 @@ export async function getNearbyOffers(
       products: offers.products,
       price: offers.rewardPoints,
       businessName: businesses.name,
+      category: businesses.category,
       businessAddress: businesses.address,
       businessPhone: businesses.phone,
       businessLat: businesses.latitude,
@@ -54,8 +56,10 @@ export async function getNearbyOffers(
     ? await baseQuery.where(
         or(
           like(businesses.name, `%${searchQuery}%`),
+          like(businesses.category, `%${searchQuery}%`),
           like(offers.title, `%${searchQuery}%`),
-          like(offers.description, `%${searchQuery}%`)
+          like(offers.description, `%${searchQuery}%`),
+          like(offers.products, `%${searchQuery}%`)
         )
       )
     : await baseQuery;
@@ -70,6 +74,7 @@ export async function getNearbyOffers(
     products: (offer.products ? typeof offer.products === 'string' ? JSON.parse(offer.products) : offer.products : null) as Product[] | null,
     price: offer.price ?? 0,
     businessName: offer.businessName,
+    category: offer.category,
     businessAddress: offer.businessAddress,
     businessPhone: offer.businessPhone,
     businessLat: offer.businessLat,
@@ -82,6 +87,5 @@ export async function getNearbyOffers(
       : -1,
   }));
 
-  return hasGps ? mapped.filter(o => o.distance <= 5) : mapped;
+  return hasGps ? mapped.sort((a, b) => a.distance - b.distance) : mapped;
 }
-

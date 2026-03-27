@@ -1,27 +1,41 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, Phone, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-// Import auth from next-auth if using client side auth
+
+import { registerAction } from '@/actions/auth';
+import { toast } from 'sonner';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('USER');
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock flow:
-    localStorage.setItem('user_name', name);
-    localStorage.setItem('user_email', email);
-    localStorage.setItem('user_phone', phone);
-    window.location.href = '/login';
+    setLoading(true);
+    
+    try {
+      const res = await registerAction({ name, email, phone, role, password });
+      if (res.success) {
+        toast.success('Cadastro realizado!', { description: 'Agora você pode entrar.' });
+        window.location.href = '/login';
+      } else {
+        toast.error('Erro no cadastro', { description: res.error });
+      }
+    } catch (err) {
+      toast.error('Erro de conexão');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen mesh-bg flex items-center justify-center p-4 font-sans">
+    <div className="min-h-screen mesh-bg flex items-center justify-center p-4 font-sans text-white">
       <div className="w-full max-w-sm glass-dark rounded-3xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 tracking-tight">
@@ -33,83 +47,98 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <form onSubmit={handleRegister} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Nome Completo
-            </label>
+        <form onSubmit={handleRegister} className="space-y-4">
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-white/80 ml-1">Nome</label>
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
               <input
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="input-dark pl-10"
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-11"
                 placeholder="Seu Nome"
                 required
               />
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Email
-            </label>
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-white/80 ml-1">Email</label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="input-dark pl-10"
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-11"
                 placeholder="seu@email.com"
                 required
               />
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Telefone/WhatsApp
-            </label>
-            <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-              <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                className="input-dark pl-10"
-                placeholder="(46) 99999-9999"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Senha
-            </label>
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-white/80 ml-1">Senha</label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
               <input
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="input-dark pl-10"
-                placeholder="••••••••"
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-11"
+                placeholder="Sua senha secreta"
+                required
+                minLength={6}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-white/80 ml-1">Telefone</label>
+            <div className="relative">
+              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-11"
+                placeholder="(46) 99999-9999"
                 required
               />
             </div>
           </div>
 
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-white/80 ml-1">Tipo de Conta</label>
+            <div className="relative">
+              <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <select
+                value={role}
+                onChange={e => setRole(e.target.value)}
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-11 appearance-none cursor-pointer"
+                required
+              >
+                <option value="USER" className="bg-slate-900">USER (Busca Ofertas)</option>
+                <option value="BUSINESS" className="bg-slate-900">BUSINESS (Sou Empresa)</option>
+              </select>
+            </div>
+          </div>
+
           <Button 
             type="submit"
+            disabled={loading}
             className="w-full h-12 btn-gradient text-[15px] mt-2 flex items-center justify-center gap-2"
           >
-            <ArrowRight className="w-4 h-4" />
-            Cadastrar
+            {loading ? 'Cadastrando...' : (
+              <>
+                <ArrowRight className="w-4 h-4" />
+                Criar Conta Ninja
+              </>
+            )}
           </Button>
         </form>
+
 
         <div className="mt-8 text-center text-sm text-white/50">
           Já tem uma conta?{' '}

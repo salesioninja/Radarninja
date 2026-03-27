@@ -1,0 +1,23 @@
+
+> negocios-ninja@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.2.0 (Turbopack)
+- Environments: .env.local, .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 18.6s
+  Running TypeScript ...
+Failed to type check.
+
+./src/components/MarketplaceView.tsx:59:31
+Type error: Property 'category' does not exist on type 'NearbyOffer'.
+
+  57 |       const desc = (offer.description || '').toLowerCase();
+  58 |       const bName = (offer.businessName || '').toLowerCase();
+> 59 |       const catLower = (offer.category || '').toLowerCase();
+     |                               ^
+  60 |       const filterLower = categoryFilter.toLowerCase();
+  61 |       
+  62 |       if (filterLower === 'alimenta├º├úo') categoryMatch = desc.includes('alimenta├º├úo') || d...
+Next.js build worker exited with code: 1 and signal: null

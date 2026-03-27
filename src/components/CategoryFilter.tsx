@@ -15,7 +15,7 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative mb-6 z-20">
+    <div className="relative z-20 w-full md:w-auto">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl input-cyber text-sm font-medium w-full md:w-[220px]"

@@ -3,15 +3,16 @@
 import { db } from '../db';
 import { businesses, offers } from '../db/schema';
 import { sql, eq } from 'drizzle-orm';
-import { NearbyOffer } from './get-nearby-offers';
+import { NearbyOffer, Product } from './get-nearby-offers';
 import { empresaFormSchema, EmpresaFormValues } from '../schema/admin-empresa';
+import { authenticatedAction } from '../../auth';
 
-export async function createEmpresaAction(data: EmpresaFormValues): Promise<{ success: boolean; data?: NearbyOffer; error?: string }> {
-  try {
+
+// ── C ── Create
+export const createEmpresaAction = authenticatedAction(
+  { requiredRole: 'ADMIN' },
+  async (data: EmpresaFormValues) => {
     const validated = empresaFormSchema.parse(data);
-
-    // Na arquitetura atual, "Categoria" é muitas vezes adicionada à descrição para compatibilidade.
-    // Mas agora temos os campos explícitos.
     const descriptionFormatted = `${validated.category} | ${validated.shortDescription}`;
 
     const [business] = await db.insert(businesses).values({
@@ -28,35 +29,43 @@ export async function createEmpresaAction(data: EmpresaFormValues): Promise<{ su
 
     const [offer] = await db.insert(offers).values({
       businessId: business.id,
-      title: validated.shortDescription, // Short description is technically the title in standard layout? Actually title is used as headline. Let's use name or shortDesc.
+      title: validated.shortDescription,
       description: descriptionFormatted,
       imageUrl: validated.coverImageUrl || null,
       products: validated.products && validated.products.length > 0 ? validated.products : null,
-      rewardPoints: 100, // Defaul
+      rewardPoints: 100,
       expiresAt: validated.expiresAt || null,
     }).returning();
 
-    // Map back to NearbyOffer to fulfill test requirements and UI usage
     const resultJson: NearbyOffer = {
       id: offer.id,
       title: offer.title,
-      description: offer.description,
-      imageUrl: offer.imageUrl,
-      products: (offer.products ? offer.products : null) as any,
+      description: offer.description ?? '',
+      imageUrl: offer.imageUrl ?? '',
+      products: (offer.products ? (offer.products as any[]).map(p => ({
+        name: p.name || '',
+        price: p.price || 0,
+        image: p.image || '',
+        link: p.link || '',
+        buttonText: p.buttonText || ''
+      })) : []) as Product[],
+
       price: offer.rewardPoints ?? 100,
       businessName: business.name,
-      businessAddress: business.address,
-      businessPhone: business.phone,
+      category: business.category,
+      businessAddress: business.address ?? '',
+      businessPhone: business.phone ?? '',
       businessLat: business.latitude,
       businessLng: business.longitude,
       distance: 0, 
     };
 
-    return { success: true, data: resultJson };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+
+
+    return resultJson;
   }
-}
+);
+
 
 // ── R ── Read (Busca Múltipla & Por ID)
 export async function getAdminEmpresas() {
@@ -101,19 +110,28 @@ export async function getAdminEmpresaById(offerId: string): Promise<EmpresaFormV
     phone: record.businessInfo.phone || '',
     latitude: record.businessInfo.latitude,
     longitude: record.businessInfo.longitude,
-    products: (record.offerInfo.products as any) || [],
+    products: (record.offerInfo.products ? (record.offerInfo.products as any[]).map(p => ({
+        name: p.name || '',
+        price: p.price || 0,
+        image: p.image || '',
+        link: p.link || '',
+        buttonText: p.buttonText || ''
+    })) : []),
+
     expiresAt: record.offerInfo.expiresAt || '',
   };
 }
 
+
 // ── U ── Update (Por ID do Offer)
-export async function updateEmpresaAction(offerId: string, data: EmpresaFormValues): Promise<{ success: boolean; error?: string }> {
-  try {
+export const updateEmpresaAction = authenticatedAction(
+  { requiredRole: 'ADMIN' },
+  async ({ offerId, data }: { offerId: string; data: EmpresaFormValues }) => {
     const validated = empresaFormSchema.parse(data);
 
     // Encontrar o businessId correspondente
     const [existingOffer] = await db.select({ businessId: offers.businessId }).from(offers).where(eq(offers.id, offerId)).limit(1);
-    if (!existingOffer) return { success: false, error: 'Oferta não encontrada' };
+    if (!existingOffer) throw new Error('Oferta não encontrada');
 
     const descriptionFormatted = `${validated.category} | ${validated.shortDescription}`;
 
@@ -138,16 +156,22 @@ export async function updateEmpresaAction(offerId: string, data: EmpresaFormValu
     }).where(eq(offers.id, offerId));
 
     return { success: true };
-  } catch (error: any) {
-    return { success: false, error: error.message };
   }
-}
+);
+
+
 
 // ── D ── Delete (Por ID do Offer)
-export async function deleteEmpresaAction(offerId: string): Promise<{ success: boolean; error?: string }> {
-  try {
-    const [existingOffer] = await db.select({ businessId: offers.businessId }).from(offers).where(eq(offers.id, offerId)).limit(1);
-    if (!existingOffer) return { success: false, error: 'Oferta não encontrada' };
+
+export const deleteEmpresaAction = authenticatedAction(
+  { requiredRole: 'ADMIN' },
+  async (offerId: string) => {
+    const [existingOffer] = await db.select({ businessId: offers.businessId })
+      .from(offers)
+      .where(eq(offers.id, offerId))
+      .limit(1);
+
+    if (!existingOffer) throw new Error('Oferta não encontrada');
 
     // Deleta a oferta (Cascade pode não estar configurado via schema, então fazemos manual)
     await db.delete(offers).where(eq(offers.id, offerId));
@@ -155,7 +179,6 @@ export async function deleteEmpresaAction(offerId: string): Promise<{ success: b
     await db.delete(businesses).where(eq(businesses.id, existingOffer.businessId));
 
     return { success: true };
-  } catch (error: any) {
-    return { success: false, error: error.message };
   }
-}
+);
+

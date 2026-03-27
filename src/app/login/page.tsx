@@ -1,25 +1,52 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Lock, Phone, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Phone, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-// Import auth from next-auth if using client side auth
+import { signIn } from 'next-auth/react';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('salesioninja@gmail.com');
+  const [email, setEmail] = useState('admin@acessaronline.com.br');
+  const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('46999765576');
-  const [password, setPassword] = useState('12345678');
+  const [role, setRole] = useState('USER');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Auth flow mock:
-    localStorage.setItem('user_email', email);
-    localStorage.setItem('user_phone', phone);
-    window.location.href = '/';
+    setLoading(true);
+    
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error('Erro ao entrar', { description: 'Usuário não encontrado. Cadastre-se primeiro.' });
+      } else {
+        toast.success('Login realizado!');
+        
+        // Pequeno hack para teste: se o email tiver admin, manda pro painel
+        // O ideal seria pegar a sessão, mas como redirecionamos rápido, 
+        // a próxima página já estará protegida.
+        if (email.toLowerCase().includes('admin')) {
+          window.location.href = '/admin/empresas';
+        } else {
+          window.location.href = '/';
+        }
+      }
+    } catch (err) {
+      toast.error('Erro de conexão');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen mesh-bg flex items-center justify-center p-4 font-sans">
+    <div className="min-h-screen mesh-bg flex items-center justify-center p-4 font-sans text-white">
       <div className="w-full max-w-sm glass-dark rounded-3xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 tracking-tight">
@@ -27,14 +54,14 @@ export default function LoginPage() {
             <span className="text-[var(--neon-purple)]">Ninja</span>
           </h1>
           <p className="text-white/60 text-sm">
-            Entre para descobrir ofertas incríveis
+            Entre com seu e-mail cadastrado
           </p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Email
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-white/80 ml-1">
+              Seu E-mail
             </label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
@@ -42,33 +69,16 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="input-dark pl-10"
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-12"
                 placeholder="seu@email.com"
                 required
               />
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Telefone/WhatsApp
-            </label>
-            <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-              <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                className="input-dark pl-10"
-                placeholder="(46) 99999-9999"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-white/80 ml-1">
-              Senha
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-white/80 ml-1">
+              Sua Senha
             </label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
@@ -76,20 +86,28 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="input-dark pl-10"
-                placeholder="••••••••"
+                className="input-dark pl-10 w-full bg-black/40 border-white/10 rounded-xl h-12"
+                placeholder="Sua senha secreta"
+                required
               />
             </div>
           </div>
 
           <Button 
             type="submit"
+            disabled={loading}
             className="w-full h-12 btn-gradient text-[15px] mt-2 flex items-center justify-center gap-2"
           >
-            <ArrowRight className="w-4 h-4" />
-            Entrar
+            {loading ? 'Validando...' : (
+              <>
+                <ArrowRight className="w-4 h-4" />
+                Entrar no Sistema
+              </>
+            )}
           </Button>
         </form>
+
+
 
         <div className="mt-8 text-center text-sm text-white/50">
           Não tem uma conta?{' '}
