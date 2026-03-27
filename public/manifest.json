@@ -1,6 +1,6 @@
 {
-  "name": "Negócios Ninja",
-  "short_name": "Ninja",
+  "name": "Radar Ninja",
+  "short_name": "Radar Ninja",
   "description": "Seu Radar de missões e economia local.",
   "start_url": "/",
   "display": "standalone",

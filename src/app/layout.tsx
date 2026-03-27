@@ -20,8 +20,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Descoberta Local",
-  description: "Encontre os melhores estabelecimentos e ofertas perto de você.",
+  title: "Radar Ninja | Detecção de Ofertas",
+  description: "Detecte as melhores ofertas e serviços na sua proximidade com o Radar Ninja.",
   manifest: "/manifest.json",
   themeColor: "#ffffff",
 };

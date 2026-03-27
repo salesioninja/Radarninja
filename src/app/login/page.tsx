@@ -50,7 +50,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm glass-dark rounded-3xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 tracking-tight">
-            <span className="text-[var(--neon-cyan)]">Negócios</span>{' '}
+            <span className="text-[var(--neon-cyan)]">Radar</span>{' '}
             <span className="text-[var(--neon-purple)]">Ninja</span>
           </h1>
           <p className="text-white/60 text-sm">

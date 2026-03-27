@@ -63,7 +63,7 @@ export function OfferDetailDialog({ offer, onClose }: { offer: NearbyOffer | nul
                           window.open(item.link, '_blank');
                         } else {
                           const priceStr = `R$ ${item.price.toFixed(2).replace('.', ',')}`;
-                          const text = encodeURIComponent(`Olá, tenho interesse no serviço/produto *${item.name}* (${priceStr}) que vi no app Negócios Ninja!`);
+                          const text = encodeURIComponent(`Olá, tenho interesse no serviço/produto *${item.name}* (${priceStr}) que vi no app Radar Ninja!`);
                           const phoneBase = offer.businessPhone ? offer.businessPhone.replace(/\D/g, '') : '5546999765576';
                           window.open(`https://wa.me/${phoneBase}?text=${text}`, '_blank');
                         }

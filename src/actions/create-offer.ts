@@ -22,7 +22,7 @@ export const createOfferAction = authenticatedAction(
   }, user) => {
     // Geocodificação OpenStreetMap (Nominatim)
     const geocodeRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(data.address)}`, {
-      headers: { 'User-Agent': 'NegociosNinja/1.0' }
+      headers: { 'User-Agent': 'RadarNinja/1.0' }
     });
 
     if (!geocodeRes.ok) {

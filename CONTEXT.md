@@ -1,9 +1,9 @@
 # CONTEXT.md - Memória de Longo Prazo
 
-Bem-vindo(a) ao projeto **Negócios Ninja**. Este documento serve como guia arquitetural, estratégico e técnico para IAs ou novos desenvolvedores que venham atuar neste repositório.
+Bem-vindo(a) ao projeto **Radar Ninja**. Este documento serve como guia arquitetural, estratégico e técnico para IAs ou novos desenvolvedores que venham atuar neste repositório.
 
 ## Visão Geral e Propósito
-O **Negócios Ninja** é uma plataforma de comércio local desenhada para conectar usuários finais a empresas e serviços na sua região. O aplicativo estrutura-se em um modelo de Marketplace ou "Vitrine de Empresas" com três pilares principais:
+O **Radar Ninja** é uma plataforma de comércio local desenhada para conectar usuários finais a empresas e serviços na sua região. O aplicativo estrutura-se em um modelo de Marketplace ou "Vitrine de Empresas" com três pilares principais:
 1. **Administração (Admin)**: Gestão total da plataforma, validação e governança de dados.
 2. **Comerciante (Business)**: Proprietários de pequenos e médios negócios locais que expõem seus serviços, ofertas e produtos no aplicativo para captação de clientes (muitas vezes guiando o lead para o WhatsApp ou outro canal).
 3. **Usuário Final (User)**: O consumidor local que navega pelas oportunidades, visualiza ofertas por proximidade geográfica e interage com os negócios (via mapas/chat/redes).

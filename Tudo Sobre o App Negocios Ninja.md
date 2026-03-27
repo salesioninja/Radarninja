@@ -1,76 +1,69 @@
-CONTEXT.md - Memória de Longo Prazo
+Entendido, Piloto. Documento atualizado para a nova fase: **Radar Ninja**. 
 
-Bem-vindo(a) ao projeto **Negócios Ninja**. Este documento serve como guia arquitetural, estratégico e técnico para IAs ou novos desenvolvedores que venham atuar neste repositório.
+O foco agora não é apenas "listar negócios", mas "detectar oportunidades locais" em tempo real. Abaixo está o seu novo `CONTEXT.md` revisado. Salve-o na raiz do seu projeto.
 
-## Visão Geral e Propósito
-O **Negócios Ninja** é uma plataforma de comércio local desenhada para conectar usuários finais a empresas e serviços na sua região. O aplicativo estrutura-se em um modelo de Marketplace ou "Vitrine de Empresas" com três pilares principais:
-1. **Administração (Admin)**: Gestão total da plataforma, validação e governança de dados.
-2. **Comerciante (Business)**: Proprietários de pequenos e médios negócios locais que expõem seus serviços, ofertas e produtos no aplicativo para captação de clientes (muitas vezes guiando o lead para o WhatsApp ou outro canal).
-3. **Usuário Final (User)**: O consumidor local que navega pelas oportunidades, visualiza ofertas por proximidade geográfica e interage com os negócios (via mapas/chat/redes).
+---
 
-## Arquitetura de Software
-O sistema segue a arquitetura **RSC (React Server Components)** impulsionada pelo framework Next.js (App Router), dividindo claramente interface (Client) de processamento backend (Server) sem a necessidade de uma API REST desacoplada explícita.
+# CONTEXT.md - Memória de Longo Prazo: Radar Ninja
 
-- **Estrutura de Diretórios**:
-  - `src/app/`: Define as rotas (`/admin`, `/dashboard` para lojistas, `/login`, `/register`). Utiliza o layout do App Router garantindo hidratação apenas quando necessário.
-  - `src/actions/`: Centraliza todas as **Server Actions**. As ações recebem inputs diretos do React (components/formulários) e resolvem transações no banco de dados. Todas as interações mutáveis devem passar por aqui usando um "Action Wrapper" que cuida de ACL e respostas padronizadas.
-  - `src/components/`: Componentes visuais puramente UI ou lógicos reusáveis (Tailwind CSS, Shadcn/ui).
-  - `src/db/`: Contém os schemas do banco (`schema.ts`), as instâncias locais (SQLite via Drizzle), e scripts de manutenção (seeds, exportações).
-  - `src/schema/`: Schemas de validação de dados utilizando Zod para tipagem estrita no Frontend e no Backend simultaneamente.
-  - `src/__tests__/`: Pasta exclusiva para testes de integração com o banco e lógica de negócios.
+Bem-vindo(a) ao projeto **Radar Ninja**. Este documento serve como guia arquitetural, estratégico e técnico para IAs ou novos desenvolvedores que venham atuar neste repositório.
 
-- **Fluxo de Dados**:
-  O fluxo normal de operação é: Formulário Web → Validação Frontend Zod → `await action()` (Server Action) → Verificação de Sessão JWT/Auth.js → Validação Backend Zod → Query no SQLite (via Drizzle ORM) → Retorno tipado `ActionResponse<T>`.
+## 1. Visão Geral e Propósito
+O **Radar Ninja** é uma plataforma de detecção de oportunidades e comércio local desenhada para conectar usuários finais a empresas e serviços na sua região. O aplicativo estrutura-se em um modelo de "Radar de Ofertas" com três pilares principais:
+* **Administração (Admin)**: Gestão total da plataforma, validação e governança de dados.
+* **Comerciante (Business)**: Lojistas locais que expõem serviços e ofertas para captação de leads (geralmente via WhatsApp).
+* **Usuário Final (User)**: O consumidor que utiliza o radar para visualizar ofertas por proximidade geográfica e interage com os negócios.
 
-## Tech Stack Detalhada
-- **Linguagem Principal**: TypeScript (Estrito).
-- **Framework Frontend/Fullstack**: Next.js 16.2.0 (App Router, React 19).
-- **Estilização**: Tailwind CSS v4, Base UI, tw-animate-css, Framer Motion para animações.
-- **Componentes**: Arquitetura híbrida envolvendo padrões Shadcn UI e Lucide React para ícones.
-- **Banco de Dados**: SQLite gerenciado via `@libsql/client` e **Drizzle ORM** (`drizzle-kit` para migrações). Preparado para escalar caso necessário (podendo integrar-se com Turso/Hostinger).
-- **Autenticação e Segurança**: NextAuth (`next-auth@5.0.0-beta.30` - Auth.js) acoplado com `bcryptjs` para credenciais manuais (CredentialsProvider) e uso do adaptador Drizzle, rodando local em Web Cookies/JWT na estratégia Edge.
-- **Inteligência Artificial**: Google Generative AI (`@google/generative-ai`) integrado localmente no fluxo e hooks webhooks de integração (e.g. `n8n`).
-- **PWA e Notificações**: Uso de `@ducanh2912/next-pwa` em conjunto com `web-push` e VAPID keys mantendo um worker rodando para notificações em tempo real geolocalizadas.
+## 2. Arquitetura de Software
+O sistema utiliza a arquitetura **React Server Components (RSC)** com Next.js (App Router), dividindo interface (Client) de processamento backend (Server).
 
-## Mapeamento de Funcionalidades
-A aplicação divide estritamente os acessos governados pela role do usuário (`USER`, `BUSINESS`, `ADMIN`).
+* **Estrutura de Diretórios**:
+    * `src/app/`: Rotas do sistema (`/admin`, `/dashboard`, `/login`, `/register`).
+    * `src/actions/`: Centraliza **Server Actions** com "Action Wrapper" para controle de acesso (ACL).
+    * `src/components/`: Componentes visuais (Tailwind CSS v4, Shadcn/ui).
+    * `src/db/`: Schemas do banco e instâncias SQLite via **Drizzle ORM**.
+    * `src/schema/`: Validação de dados com **Zod** para tipagem estrita.
+    * `src/__tests__/`: Testes de integração lógica e de banco.
 
-### 1. Área Admin (`/admin`)
-- **Acesso Crítico**: Somente uma conta possui acesso supremo garantido (`admin@acessaronline.com.br`). Demais contas que tiverem ADMIN ganham downgrade para USER no ato do login como proteção automática.
-- Funcionalidades: Dashboard superior, C.R.U.D total de Entidades (Negócios "Businesses" e Ofertas "Offers"). Pode editar coordenadas, links de integração (webhook n8n do lojista), produtos dentro das ofertas em JSON, alterar o prazo da vaga e emitir Notificações Push Globais.
+* **Fluxo de Dados**: Formulário Web → Validação Zod → Server Action → Verificação de Sessão (Auth.js) → Query SQLite (Drizzle) → Retorno tipado.
 
-### 2. Área Comerciante (`BUSINESS` access em `/dashboard`)
-- Representa os donos das lojas cadastradas na DB na tabela `businesses`.
-- Eles vinculam produtos dentro da suas `Offers`. Um "Business" pode alterar localidade, descrição e informações de contato. (O desenvolvimento do dashboard de auto-serviço do comerciante está sob governança das Server Actions mas atrelado logica e geograficamente a table `business`).
+## 3. Tech Stack Detalhada
+* **Linguagem**: TypeScript (Estrito).
+* **Framework**: Next.js 16.2.0 (React 19).
+* **Estilização**: Tailwind CSS v4, Framer Motion e Base UI.
+* **Banco de Dados**: SQLite via `@libsql/client` e Drizzle ORM.
+* **Autenticação**: NextAuth (Auth.js v5 beta) com estratégia JWT.
+* **IA e Integração**: Google Generative AI e webhooks para n8n.
+* **PWA**: `@ducanh2912/next-pwa` com notificações geolocalizadas via `web-push`.
 
-### 3. Área Usuário Final (`USER`)
-- O foco principal é a vitrine (Marketplace/Radar UI).
-- Sistema de busca semântica, cálculos matemáticos na query de mapa (Haversine/Geolocalização para filtrar negócios próximos ao usuário).
-- Visualiza estabelecimentos, entra em contato pelo botão de WhatsApp que pré-carrega mensagens parametrizadas e engaja no site acumulando possíveis Reward Points das `Offers`. Possibilidade de receber Notificações Web Push.
+## 4. Mapeamento de Funcionalidades
+A aplicação governa acessos via roles: `USER`, `BUSINESS`, `ADMIN`.
 
-## Regras de Negócio Críticas
-1. **Controle de Acessos Rígido no Edge**: O arquivo `middleware.ts` bloqueia invasões isolando o diretório de `/admin` para estritos administradores e barrando usuários leigos nas telas do `/dashboard`.
-2. **Server Action Protection**: Toda mutação no DB passa pelo High Order Function `authenticatedAction({ requiredRole: 'XXX' }, async () => {})`. Isso blinda a ação do backend caso um cliente burle o front-end.
-3. **Cascatas de Deleção**: Na tabela, as `Offers` interligam-se a um `Business`. O relacionamento DB Delete Cascade destrói as ofertas pendentes quando a loja é removida.
-4. **Armazenamento Híbrido Drizzle**: Para maior facilidade estrutural, a listagem de `Products` pertinentes a `Offers` é arquivada em formato JSON Mode dentro da string no SQLite, viabilizando arrays genéricos num cenário SQL clássico sem table extra para products.
+* **Área Admin (`/admin`)**: C.R.U.D total de Entidades, edição de coordenadas geográficas e emissão de Push Notifications Globais. Acesso restrito ao e-mail mestre configurado.
+* **Área Comerciante (`/dashboard`)**: Gestão de dados da loja e vinculação de produtos às ofertas (`Offers`).
+* **Área Usuário Final**: Interface de Radar/Marketplace com busca semântica e cálculos de geolocalização (Haversine) para filtrar ofertas próximas.
 
-## Padrões de Código e Estilo
-Para garantir uma harmonia técnica em toda contribuição futura:
-- **Clean Architecture + RSC Prático**: Evite excesso de injeção de dependência herdado de Node monolítico. Focar no Next.js patterns (separação severa entre `use client` nas folhas e manipulação de DB direta no server/actions).
-- **Server Component First**: Sempre que possível, componentes carregam os dados já no render de servidor. Componentes interativos recebem dados via props passados pelo parent server component.
-- **Funcional e Previsível**: Utilize tipagem rigorosa Zod + TypeScript, não utilize o tipo `any`. Retorne sempre dicionários com `{ success: boolean, data?: any, error?: string }` para que o frontend lide com falhas amigavelmente, nunca lançando Throw genérico sem catch em Server Actions.
-- **Estilização Tailwind**: Use classes puras do Tailwind. Componentes grandes podem ser encapsulados, mas não escreva CSS convencional global a menos que extremamente necessário.
+## 5. Regras de Negócio Críticas
+* **Bloqueio no Edge**: O `middleware.ts` isola o diretório `/admin` estritamente para administradores.
+* **Proteção de Mutação**: Uso da HOF `authenticatedAction` para blindar Server Actions no backend.
+* **Deleção em Cascata**: A remoção de um negócio destrói automaticamente suas ofertas vinculadas no DB.
+* **Produtos via JSON**: A listagem de produtos dentro de uma oferta é armazenada em formato JSON dentro do SQLite para flexibilidade.
 
-## Protocolo de Testes (TDD)
-- O framework de escolha é o **Vitest**, otimizado para executar nativamente os ES Modules do TypeScript sem babel.
-- Ambiente: Roda em modo `node`.
-- Localização: Os arquivos de testes ficam centralizados na pasta `src/__tests__/`, mas o padrão estendido engloba sufixo `.test.ts` e `.test.tsx`.
-- Validação: Os testes rodados validam a integração. Ao escrever uma Server Action nova (arquivos `actions/*`), o desenvolvedor **deve escrever um teste de integração no __tests__** atestando a persistência no SQLite e a validade do Zod.
-- Comando local: Rodar `npm run test` antes de todos os PRs/Deploys.
+## 6. Padrões de Código e Estilo
+* **Server Component First**: Priorizar carregamento de dados no servidor.
+* **Tipagem Rigorosa**: Proibido o uso de `any`; uso obrigatório de Zod.
+* **Retorno Padronizado**: Dicionários `{ success, data, error }` para tratamento amigável no frontend.
 
-## Dúvidas Técnicas para o Piloto
-Para garantir que futuras integrações sejam feitas sem invenções errôneas da IA, o operador do sistema precisa esclarecer:
-1. **Pagamentos e Transações Financeiras**: Existe um fluxo de Checkout in-app, ou todas as vendas atualmente correm por fora no WhatsApp usando o click-to-chat parameter (`link` gerado nos botões dos produtos)? E os Reward Points (`rewardPoints`), como e quando eles são consolidados / trocados pelo Usuário?
-2. **Setup do Lojista (Onboarding)**: Qual é o fluxo final para que um Usuário se torne Comerciante (`BUSINESS`)? O Admin valida o CNPJ e o insere manualmente ou existe um portal automático pedindo documentação?
-3. **Geocodificação**: Como o aplicativo converte o endereço do Lojista em Lat/Long automatizado? Atualmente dependemos de alguma chave de API de Maps oculta (e.g. Google Maps Geocoding integration) no save do formulário ou o próprio lojista crava o pino no mapa?
-4. **Integração Automática via AI/N8N**: O fluxo completo do Webhook salvo no campo `n8nEndpointUrl`. Exatamente que payload o sistema atirará para o N8N da loja e em qual ciclo de vida (no chat, na compra)?
+## 7. Protocolo de Testes (TDD)
+* Framework: **Vitest** rodando em modo node.
+* Regra: Toda nova Server Action deve ser acompanhada de um teste de integração em `src/__tests__/`.
+
+## 8. Dúvidas Técnicas para o Piloto
+1.  **Financeiro**: O fluxo de vendas é exclusivamente via WhatsApp ou haverá checkout interno?
+2.  **Onboarding**: Como um usuário vira Comerciante? Existe um portal de auto-cadastro ou é manual via Admin?
+3.  **Geocoding**: A conversão de endereço para Lat/Long é feita via API de Maps no salvamento ou o lojista define manualmente?
+4.  **Payload n8n**: Qual o gatilho exato e o conteúdo do payload enviado para o webhook do lojista?
+
+---
+
+### 

@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       return webpush.sendNotification(
         pushConfig,
         JSON.stringify({
-          title: title || 'Novidade no Negócios Ninja!',
+          title: title || 'Novidade no Radar Ninja!',
           body: body || 'Confira agora.',
           icon: icon || '/icon512_maskable.png',
           image: image,
