@@ -1,12 +1,9 @@
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
 import { NextResponse } from 'next/server';
-import { auth } from './auth';
 
-// Pilar 1 (Alfabetização Lógica):
-// O Middleware atua na Edge Network do Next.js ANTES de a página ser renderizada ou checar banco de dados.
-// Ele intercepta requests, decodifica o JWT guardado estritamente por cookie da web,
-// e valida se esse ninja tem a permissão de "BUSINESS" antes de permitir o acesso ao "/dashboard".
-// Fazer isso na edge previne vulnerabilidades como o vazamento de tela temporária (FOUC),
-// e economiza tráfego de máquina, afinal usuários negados não gastam nosso banco de dados da Vercel.
+const { auth } = NextAuth(authConfig);
+
 export default auth((req) => {
   const { pathname } = req.nextUrl;
   
