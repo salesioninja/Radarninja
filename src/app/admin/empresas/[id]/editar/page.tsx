@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getAdminEmpresaById } from '@/actions/admin-empresa';
 import { EmpresaForm } from '@/components/admin/EmpresaForm';
 import { notFound } from 'next/navigation';

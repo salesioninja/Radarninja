@@ -8,7 +8,7 @@ import { auth } from './auth';
 // Fazer isso na edge previne vulnerabilidades como o vazamento de tela temporária (FOUC),
 // e economiza tráfego de máquina, afinal usuários negados não gastam nosso banco de dados da Vercel.
 export default auth((req) => {
-  const pathname = req.nextUrl.pathname;
+  const { pathname } = req.nextUrl;
   
   // 1. ÁREA DE ADMINISTRAÇÃO MÁXIMA (Apenas ADMIN)
   if (pathname.startsWith('/admin')) {
@@ -16,8 +16,6 @@ export default auth((req) => {
     if (!req.auth || role !== 'ADMIN') {
       const loginUrl = new URL('/api/auth/signin', req.url);
       loginUrl.searchParams.set('callbackUrl', pathname);
-      // Aqui poderíamos redirecionar para '/' ou '/unauthorized', 
-      // mas vamos redirecionar para signin para forçar o login correto.
       return NextResponse.redirect(loginUrl);
     }
   }

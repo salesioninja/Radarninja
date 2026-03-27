@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const { title, body, icon, image, url } = await req.json();
 
-    const subscriptions = await db.select().from(pushSubscriptions).all();
+    const subscriptions = await db.select().from(pushSubscriptions);
     
     const notifications = subscriptions.map((sub) => {
       const pushConfig = {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         JSON.stringify({
           title: title || 'Novidade no Radar Ninja!',
           body: body || 'Confira agora.',
-          icon: icon || '/icon512_maskable.png',
+          icon: icon || '/radarninja/icon512_maskable.png',
           image: image,
           url: url || '/',
         })

@@ -1,8 +1,8 @@
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/mysql2';
+import mysql from 'mysql2/promise';
 
-const client = createClient({
-  url: process.env.DB_URL || 'file:./local.db',
+const poolConnection = mysql.createPool({
+  uri: process.env.DATABASE_URL,
 });
 
-export const db = drizzle(client);
+export const db = drizzle(poolConnection);

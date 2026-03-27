@@ -9,8 +9,8 @@ import 'dotenv/config';
 export default defineConfig({
   schema: './src/db/schema.ts',
   out: './drizzle',
-  dialect: 'mysql',
+  dialect: 'sqlite', // Em dev, usamos SQLite (via libSQL). Em prod, trocaremos para `mysql`
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: process.env.DB_URL || 'file:./local.db',
   },
 });

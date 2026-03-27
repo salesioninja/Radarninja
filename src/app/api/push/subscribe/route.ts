@@ -14,11 +14,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if already exists
-    const existing = await db
+    const [existing] = await db
       .select()
       .from(pushSubscriptions)
       .where(eq(pushSubscriptions.endpoint, subscription.endpoint))
-      .get();
+      .limit(1);
 
     if (existing) {
       // Update userId if session exists and it was previously null or different

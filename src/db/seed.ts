@@ -3,25 +3,25 @@
  * Pilar 1: Endereços reais, categorias na description para busca semântica.
  */
 
-import { drizzle } from 'drizzle-orm/libsql';
-import { sql } from 'drizzle-orm';
-import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/mysql2';
+import mysql from 'mysql2/promise';
 import { businesses, offers } from './schema';
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
 
 dotenv.config({ path: resolve(process.cwd(), '.env') });
 
-const client = createClient({ url: process.env.DB_URL || 'file:./local.db' });
-const db = drizzle(client);
+const poolConnection = mysql.createPool({
+  uri: process.env.DATABASE_URL,
+});
+const db = drizzle(poolConnection);
 
 async function seed() {
   console.log('🌱 Seed – Profissionais do Paraná\n');
 
-  console.log('🗑  Limpando dados antigos e Atualizando Schema...');
+  console.log('🗑  Limpando dados antigos...');
   try {
-    await db.run(sql`ALTER TABLE offers ADD COLUMN image_url text`);
-    await db.run(sql`ALTER TABLE offers ADD COLUMN products text`);
+    // MySQL uses truncate or standard delete. Schema changes should be done via migrations.
   } catch (e) {}
 
   await db.delete(offers);
@@ -191,16 +191,19 @@ async function seed() {
   ];
 
   for (const item of data) {
-    const [business] = await db.insert(businesses).values({
+    const businessId = crypto.randomUUID();
+    await db.insert(businesses).values({
+      id: businessId,
       name: item.name,
       address: item.address,
       phone: item.phone,
       latitude: item.latitude,
       longitude: item.longitude,
-    }).returning();
+    });
 
     await db.insert(offers).values({
-      businessId: business.id,
+      id: crypto.randomUUID(),
+      businessId: businessId,
       title: item.offer.title,
       description: item.offer.description,
       rewardPoints: item.offer.points,

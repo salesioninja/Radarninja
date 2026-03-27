@@ -43,13 +43,14 @@ export const createOfferAction = authenticatedAction(
     let businessId = existingBusiness[0]?.id;
 
     if (!businessId) {
-      const [newBusiness] = await db.insert(businesses).values({
+      businessId = crypto.randomUUID();
+      await db.insert(businesses).values({
+        id: businessId,
         userId: userId,
         name: 'Empresa Oculta',
         latitude: lat,
         longitude: lng,
-      }).returning();
-      businessId = newBusiness.id;
+      });
     } else {
       // Atualiza coordenada da empresa para a última missão postada
       await db.update(businesses).set({ latitude: lat, longitude: lng }).where(eq(businesses.id, businessId));

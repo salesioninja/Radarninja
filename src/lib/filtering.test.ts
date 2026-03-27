@@ -3,10 +3,22 @@ import { filterOffersByCategory } from './filtering';
 import { NearbyOffer } from '@/actions/get-nearby-offers';
 
 describe('Dynamic Category Filtering', () => {
-  const mockOffers = [
-    { id: 1, title: 'Pizza', description: 'Restaurante', distance: 1 } as NearbyOffer,
-    { id: 2, title: 'Corte', description: 'Salão de beleza', distance: 2 } as NearbyOffer,
-    { id: 3, title: 'Camisa', description: 'Loja Varejo', distance: 3 } as NearbyOffer,
+  const mockOffers: NearbyOffer[] = [
+    { 
+      id: "1", title: 'Pizza', description: 'Restaurante', distance: 1, 
+      imageUrl: null, products: [], price: 0, businessName: 'Pizzaria', category: 'Alimentação',
+      businessAddress: '', businessPhone: '', businessLat: 0, businessLng: 0 
+    },
+    { 
+      id: "2", title: 'Corte', description: 'Salão de beleza', distance: 2, 
+      imageUrl: null, products: [], price: 0, businessName: 'Salão', category: 'Serviços',
+      businessAddress: '', businessPhone: '', businessLat: 0, businessLng: 0
+    },
+    { 
+      id: "3", title: 'Camisa', description: 'Loja Varejo', distance: 3, 
+      imageUrl: null, products: [], price: 0, businessName: 'Loja', category: 'Moda',
+      businessAddress: '', businessPhone: '', businessLat: 0, businessLng: 0
+    },
   ];
 
   it('should return all if category is Todas', () => {

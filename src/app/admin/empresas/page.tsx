@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getAdminEmpresas, deleteEmpresaAction } from '@/actions/admin-empresa';
 import { Button } from '@/components/ui/button';
 import { Store, Plus, Edit2, Trash2, Bell } from 'lucide-react';

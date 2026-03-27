@@ -261,7 +261,9 @@ async function main() {
   console.log('Inserting %d companies...', data.length);
   for (const item of data) {
     try {
-      const [business] = await db.insert(businesses).values({
+      const businessId = crypto.randomUUID();
+      await db.insert(businesses).values({
+        id: businessId,
         name: item.nomeEmpresa,
         category: item.categoria,
         longDescription: item.descricaoLonga || null,
@@ -271,7 +273,7 @@ async function main() {
         phone: item.whatsapp,
         latitude: item.latitude,
         longitude: item.longitude,
-      }).returning();
+      });
 
       const descriptionFormatted = `${item.categoria} | ${item.descricaoCurta}`;
       
@@ -283,8 +285,10 @@ async function main() {
         buttonText: 'Comprar'
       }));
 
+      const offerId = crypto.randomUUID();
       await db.insert(offers).values({
-        businessId: business.id,
+        id: offerId,
+        businessId: businessId,
         title: item.descricaoCurta,
         description: descriptionFormatted,
         imageUrl: item.urlCapa || null,

@@ -15,7 +15,9 @@ export const createEmpresaAction = authenticatedAction(
     const validated = empresaFormSchema.parse(data);
     const descriptionFormatted = `${validated.category} | ${validated.shortDescription}`;
 
-    const [business] = await db.insert(businesses).values({
+    const businessId = crypto.randomUUID();
+    await db.insert(businesses).values({
+      id: businessId,
       name: validated.name,
       category: validated.category,
       longDescription: validated.longDescription || null,
@@ -25,24 +27,26 @@ export const createEmpresaAction = authenticatedAction(
       phone: validated.phone,
       latitude: validated.latitude,
       longitude: validated.longitude,
-    }).returning();
+    });
 
-    const [offer] = await db.insert(offers).values({
-      businessId: business.id,
+    const offerId = crypto.randomUUID();
+    await db.insert(offers).values({
+      id: offerId,
+      businessId: businessId,
       title: validated.shortDescription,
       description: descriptionFormatted,
       imageUrl: validated.coverImageUrl || null,
       products: validated.products && validated.products.length > 0 ? validated.products : null,
       rewardPoints: 100,
       expiresAt: validated.expiresAt || null,
-    }).returning();
+    });
 
     const resultJson: NearbyOffer = {
-      id: offer.id,
-      title: offer.title,
-      description: offer.description ?? '',
-      imageUrl: offer.imageUrl ?? '',
-      products: (offer.products ? (offer.products as any[]).map(p => ({
+      id: offerId,
+      title: validated.shortDescription,
+      description: descriptionFormatted,
+      imageUrl: validated.coverImageUrl || '',
+      products: (validated.products ? (validated.products as any[]).map(p => ({
         name: p.name || '',
         price: p.price || 0,
         image: p.image || '',
@@ -50,13 +54,13 @@ export const createEmpresaAction = authenticatedAction(
         buttonText: p.buttonText || ''
       })) : []) as Product[],
 
-      price: offer.rewardPoints ?? 100,
-      businessName: business.name,
-      category: business.category,
-      businessAddress: business.address ?? '',
-      businessPhone: business.phone ?? '',
-      businessLat: business.latitude,
-      businessLng: business.longitude,
+      price: 100,
+      businessName: validated.name,
+      category: validated.category,
+      businessAddress: validated.address ?? '',
+      businessPhone: validated.phone ?? '',
+      businessLat: validated.latitude,
+      businessLng: validated.longitude,
       distance: 0, 
     };
 

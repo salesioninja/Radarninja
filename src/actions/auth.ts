@@ -32,15 +32,17 @@ export async function registerAction({ name, email, phone, role, password }: { n
       userRole = 'USER';
     }
 
-    const [newUser] = await db.insert(users).values({
+    const userId = crypto.randomUUID();
+    await db.insert(users).values({
+      id: userId,
       name,
       email,
       phone,
       role: userRole as "USER" | "BUSINESS" | "ADMIN",
       password: hashedPassword,
-    }).returning();
+    });
 
-    return { success: true, user: newUser };
+    return { success: true, user: { id: userId, name, email, role: userRole } };
   } catch (error: any) {
     console.error('Registration error:', error);
     return { success: false, error: 'Erro ao realizar cadastro.' };

@@ -37,10 +37,11 @@ describe('Admin Empresa Action', () => {
 
     const response = await createEmpresaAction(mockData);
     
-    expect(response.success).toBe(true);
-    expect(response.data).toBeDefined();
+    if (!response.success) {
+      throw new Error(response.error);
+    }
 
-    const data = response.data!;
+    const data = response.data;
     
     // O objeto deve ter o ID para o Chat de IA
     expect(data.id).toBeDefined(); // Offer ID is used for OfferChat businessId prop

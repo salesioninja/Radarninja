@@ -1,13 +1,13 @@
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/mysql2';
+import mysql from 'mysql2/promise';
 import { businesses } from './schema';
 import { eq } from 'drizzle-orm';
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
 
 dotenv.config({ path: resolve(process.cwd(), '.env') });
-const client = createClient({ url: process.env.DB_URL || 'file:./local.db' });
-const db = drizzle(client);
+const poolConnection = mysql.createPool({ uri: process.env.DATABASE_URL });
+const db = drizzle(poolConnection);
 
 async function verify() {
   console.log('🔍 Executando Query de Diagnóstico de Coordenadas...');

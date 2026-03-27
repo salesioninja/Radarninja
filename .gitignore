@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local folder for Hostinger build
+/Deploy_v1
+/build_log.txt
+/server.js-bridge.txt
+/Como fazer deploy.txt

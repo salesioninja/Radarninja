@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   title: "Radar Ninja | Detecção de Ofertas",
   description: "Detecte as melhores ofertas e serviços na sua proximidade com o Radar Ninja.",
   manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
