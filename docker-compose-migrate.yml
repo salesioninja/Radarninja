@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  migrate:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-mysql://u949594359_admin2:MaxO31184@srv1722.hstgr.io:3306/u949594359_radar2}
+    command: sh -c "npm ci && npm run db:push && npm run db:seed"
