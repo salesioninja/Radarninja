@@ -1,0 +1,64 @@
+Aqui está a lista detalhada e o modelo padrão (JSON) que você pode usar para preencher os dados.
+
+📋 Campos da Empresa (Negócio/Profissional)
+Esses são os dados referentes ao local ou serviço prestado:
+
+Obrigatórios:
+
+name: Nome da empresa ou do profissional (Ex: "João Pinturas").
+latitude: Latitude exata para o mapa (Ex: -23.550520).
+longitude: Longitude exata para o mapa (Ex: -46.633308).
+Opcionais (mas muito recomendados):
+
+category: Categoria do serviço (Ex: "Manutenção", "Restaurante", "Saúde").
+phone: Telefone de contato comercial (Ex: "+5511999999999").
+address: Endereço em formato de texto (Ex: "Rua das Flores, 123, Centro").
+longDescription: Uma descrição mais longa sobre o que a empresa faz.
+logoUrl: Um link para a foto de perfil/logo da empresa (Ex: "https://site.com/logo.png").
+n8nEndpointUrl: Caso esse cliente já tenha um robô do n8n configurado, o link do Webhook dele.
+
+
+
+🎁 Ofertas / Promoções 
+Caso queira já cadastrar promoções junto com a empresa, você pode enviar uma lista offers dentro de cada empresa. Cada oferta pode ter:
+
+title: Título da oferta (Ex: "10% de Desconto").
+description: Descrição da oferta.
+imageUrl: Link de uma imagem para a oferta.
+rewardPoints: Pontos pro usuário (O padrão é 100).
+
+
+
+💻 Exemplo do Formato JSON Padrão
+Você pode me mandar o arquivo exatamente nesta estrutura:
+
+[
+  {
+    "name": "João Pinturas e Reformas",
+    "category": "Pintor",
+    "phone": "+5511988887777",
+    "address": "Rua Exemplo, 123 - Centro, São Paulo",
+    "longDescription": "Especialista em pintura residencial e comercial com 10 anos de experiência.",
+    "latitude": -23.550520,
+    "longitude": -46.633308,
+    "ownerEmail": "joao@email.com", 
+    "ownerName": "João Silva",
+    "offers": [
+      {
+        "title": "Orçamento Grátis + 10% OFF na mão de obra",
+        "description": "Diga que viu no Radar Ninja e ganhe 10% de desconto no serviço.",
+        "rewardPoints": 150
+      }
+    ]
+  },
+  {
+    "name": "Bar do Zé",
+    "category": "Restaurante",
+    "phone": "+5511977776666",
+    "address": "Avenida Principal, 400",
+    "latitude": -23.551000,
+    "longitude": -46.634000,
+    "ownerEmail": "ze@bardoze.com",
+    "ownerName": "José Almeida"
+  }
+]
