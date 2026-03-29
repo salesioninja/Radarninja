@@ -91,6 +91,29 @@ export async function getAdminEmpresas() {
 }
 
 export async function getAdminEmpresaById(offerId: string): Promise<EmpresaFormValues | null> {
+  // Lógica para empresas sem ofertas (usando o ID de fallback que criamos no list)
+  if (offerId.startsWith('no-offer-')) {
+    const businessId = offerId.replace('no-offer-', '');
+    const [biz] = await db.select().from(businesses).where(eq(businesses.id, businessId)).limit(1);
+    if (!biz) return null;
+
+    return {
+      name: biz.name,
+      category: biz.category || 'Serviços',
+      shortDescription: '',
+      longDescription: biz.longDescription || '',
+      coverImageUrl: '',
+      logoUrl: biz.logoUrl || '',
+      n8nEndpointUrl: biz.n8nEndpointUrl || '',
+      address: biz.address || '',
+      phone: biz.phone || '',
+      latitude: biz.latitude,
+      longitude: biz.longitude,
+      products: [],
+      expiresAt: '',
+    };
+  }
+
   const [record] = await db.select({
     offerInfo: offers,
     businessInfo: businesses
@@ -127,18 +150,26 @@ export async function getAdminEmpresaById(offerId: string): Promise<EmpresaFormV
 }
 
 
-// ── U ── Update (Por ID do Offer)
+// ── U ── Update (Por ID do Offer ou fallback no-offer-ID)
 export const updateEmpresaAction = authenticatedAction(
   { requiredRole: 'ADMIN' },
   async ({ offerId, data }: { offerId: string; data: EmpresaFormValues }) => {
     const validated = empresaFormSchema.parse(data);
-
-    // Encontrar o businessId correspondente
-    const [existingOffer] = await db.select({ businessId: offers.businessId }).from(offers).where(eq(offers.id, offerId)).limit(1);
-    if (!existingOffer) throw new Error('Oferta não encontrada');
-
     const descriptionFormatted = `${validated.category} | ${validated.shortDescription}`;
+    
+    let businessId: string;
+    let isNewOffer = false;
 
+    if (offerId.startsWith('no-offer-')) {
+      businessId = offerId.replace('no-offer-', '');
+      isNewOffer = true;
+    } else {
+      const [existingOffer] = await db.select({ businessId: offers.businessId }).from(offers).where(eq(offers.id, offerId)).limit(1);
+      if (!existingOffer) throw new Error('Oferta não encontrada');
+      businessId = existingOffer.businessId;
+    }
+
+    // Atualiza a Empresa
     await db.update(businesses).set({
       name: validated.name,
       category: validated.category,
@@ -149,15 +180,30 @@ export const updateEmpresaAction = authenticatedAction(
       phone: validated.phone,
       latitude: validated.latitude,
       longitude: validated.longitude,
-    }).where(eq(businesses.id, existingOffer.businessId));
+    }).where(eq(businesses.id, businessId));
 
-    await db.update(offers).set({
-      title: validated.shortDescription,
-      description: descriptionFormatted,
-      imageUrl: validated.coverImageUrl || null,
-      products: validated.products && validated.products.length > 0 ? validated.products : null,
-      expiresAt: validated.expiresAt || null,
-    }).where(eq(offers.id, offerId));
+    if (isNewOffer) {
+      // Cria a oferta associada pela primeira vez
+      await db.insert(offers).values({
+        id: crypto.randomUUID(),
+        businessId: businessId,
+        title: validated.shortDescription,
+        description: descriptionFormatted,
+        imageUrl: validated.coverImageUrl || null,
+        products: validated.products && validated.products.length > 0 ? validated.products : null,
+        rewardPoints: 100,
+        expiresAt: validated.expiresAt || null,
+      });
+    } else {
+      // Atualiza a oferta existente
+      await db.update(offers).set({
+        title: validated.shortDescription,
+        description: descriptionFormatted,
+        imageUrl: validated.coverImageUrl || null,
+        products: validated.products && validated.products.length > 0 ? validated.products : null,
+        expiresAt: validated.expiresAt || null,
+      }).where(eq(offers.id, offerId));
+    }
 
     return { success: true };
   }
