@@ -33,20 +33,20 @@ export function BottomNav({ activeTab, onChange }: BottomNavProps) {
                 isActive ? "scale-110" : "hover:scale-105"
               )}
             >
-              {/* Efeito Glow por trás do ícone ativo em Azul Forte */}
+              {/* Efeito Glow claro por trás do ícone negro ativo */}
               {isActive && (
-                <div className="absolute top-1.5 w-10 h-10 bg-blue-500/20 blur-md rounded-full -z-10" />
+                <div className="absolute top-1.5 w-10 h-10 bg-white/40 blur-md rounded-full -z-10" />
               )}
               
               <Icon 
                 className={cn(
                   "w-6 h-6 transition-all duration-300 relative z-10", 
-                  isActive ? "text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.6)]" : "text-blue-500 group-hover:text-blue-400"
+                  isActive ? "text-black drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" : "text-black/80 group-hover:text-black"
                 )} 
               />
               <span className={cn(
                 "text-[10px] font-bold tracking-wider font-sans transition-all duration-300",
-                isActive ? "text-blue-400 drop-shadow-[0_0_4px_rgba(96,165,250,0.3)]" : "text-blue-500 group-hover:text-blue-400"
+                isActive ? "text-black drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" : "text-black/80 group-hover:text-black"
               )}>
                 {tab.label}
               </span>
