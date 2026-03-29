@@ -29,14 +29,25 @@ export function BottomNav({ activeTab, onChange }: BottomNavProps) {
               key={tab.id}
               onClick={() => onChange(tab.id)}
               className={cn(
-                "flex flex-col items-center justify-center w-full h-full space-y-1.5 transition-all duration-300",
-                isActive ? "text-[var(--neon-cyan)] scale-110" : "text-muted-foreground hover:text-foreground"
+                "group relative flex flex-col items-center justify-center w-full h-full space-y-1.5 transition-all duration-300",
+                isActive ? "scale-110" : "hover:scale-105"
               )}
             >
+              {/* Efeito Glow por trás do ícone ativo */}
+              {isActive && (
+                <div className="absolute top-1.5 w-10 h-10 bg-[var(--neon-cyan)]/30 blur-md rounded-full -z-10" />
+              )}
+              
               <Icon 
-                className={cn("w-6 h-6 transition-all", isActive ? "drop-shadow-[0_0_8px_rgba(0,194,255,0.7)]" : "opacity-70")} 
+                className={cn(
+                  "w-6 h-6 transition-all duration-300 relative z-10", 
+                  isActive ? "text-[var(--neon-cyan)] drop-shadow-[0_0_12px_var(--neon-cyan)]" : "text-white/70 group-hover:text-white"
+                )} 
               />
-              <span className="text-[10px] font-semibold tracking-wider font-sans">
+              <span className={cn(
+                "text-[10px] font-bold tracking-wider font-sans transition-all duration-300",
+                isActive ? "text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.4)]" : "text-white/60 group-hover:text-white/90"
+              )}>
                 {tab.label}
               </span>
             </button>
