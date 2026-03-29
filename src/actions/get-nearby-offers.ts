@@ -42,15 +42,18 @@ export async function getNearbyOffers(
       imageUrl: offers.imageUrl,
       products: offers.products,
       price: offers.rewardPoints,
+      businessId: businesses.id,
       businessName: businesses.name,
       category: businesses.category,
+      businessDescription: businesses.longDescription,
+      businessLogo: businesses.logoUrl,
       businessAddress: businesses.address,
       businessPhone: businesses.phone,
       businessLat: businesses.latitude,
       businessLng: businesses.longitude,
     })
-    .from(offers)
-    .innerJoin(businesses, eq(offers.businessId, businesses.id));
+    .from(businesses)
+    .leftJoin(offers, eq(offers.businessId, businesses.id));
 
   const allOffers = searchQuery
     ? await baseQuery.where(
@@ -66,23 +69,23 @@ export async function getNearbyOffers(
 
   const hasGps = userLat != null && userLng != null;
 
-  const mapped = allOffers.map(offer => ({
-    id: offer.id,
-    title: offer.title,
-    description: offer.description,
-    imageUrl: offer.imageUrl,
-    products: (offer.products ? typeof offer.products === 'string' ? JSON.parse(offer.products) : offer.products : null) as Product[] | null,
-    price: offer.price ?? 0,
-    businessName: offer.businessName,
-    category: offer.category,
-    businessAddress: offer.businessAddress,
-    businessPhone: offer.businessPhone,
-    businessLat: offer.businessLat,
-    businessLng: offer.businessLng,
+  const mapped = allOffers.map(row => ({
+    id: row.id || row.businessId,
+    title: row.title || row.businessName,
+    description: row.description || row.businessDescription || 'Visite nosso estabelecimento e conheça nossos serviços!',
+    imageUrl: row.imageUrl || row.businessLogo || null,
+    products: (row.products ? typeof row.products === 'string' ? JSON.parse(row.products) : row.products : null) as Product[] | null,
+    price: row.price ?? 50,
+    businessName: row.businessName,
+    category: row.category,
+    businessAddress: row.businessAddress,
+    businessPhone: row.businessPhone,
+    businessLat: row.businessLat,
+    businessLng: row.businessLng,
     distance: hasGps
       ? calculateDistance(
           { latitude: userLat!, longitude: userLng! },
-          { latitude: offer.businessLat, longitude: offer.businessLng }
+          { latitude: row.businessLat, longitude: row.businessLng }
         )
       : -1,
   }));
