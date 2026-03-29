@@ -5,154 +5,154 @@ import bcrypt from 'bcryptjs';
 
 const companiesData = [
   {
-    "name": "Beltrão Hidráulica",
+    "name": "Soluções em Hidráulica e Vazamentos",
     "category": "Encanador",
     "phone": "+5546911110001",
-    "address": "Rua Tenente Camargo, 1500 - Centro",
-    "longDescription": "Atendimento rápido em todo o Sudoeste. Especialista em caça-vazamentos.",
+    "address": "Rua Central, 1500 - Centro",
+    "longDescription": "Atendimento rápido em toda a região. Especialista em caça-vazamentos.",
     "latitude": -26.0775,
     "longitude": -53.0512,
-    "ownerEmail": "contato@beltraohidraulica.com.br",
-    "ownerName": "Claudemir Souza"
+    "ownerEmail": "contato@solucoes-hidraulica.com.br",
+    "ownerName": "Profissional Responsável"
   },
   {
-    "name": "Eletro FB",
+    "name": "Serviços Elétricos e Manutenção",
     "category": "Eletricista",
     "phone": "+5546922220002",
-    "address": "Av. Júlio Assis Cavalheiro, 800 - Centro",
-    "longDescription": "Manutenção elétrica industrial e residencial.",
+    "address": "Av. Principal, 800 - Centro",
+    "longDescription": "Manutenção elétrica industrial e residencial. Atendimento em toda a região.",
     "latitude": -26.0750,
     "longitude": -53.0530,
-    "ownerEmail": "eletrofb@email.com",
-    "ownerName": "Jair Eletricista"
+    "ownerEmail": "eletrica@exemplo.com",
+    "ownerName": "Eletricista Especializado"
   },
   {
-    "name": "Odonto Sudoeste",
+    "name": "Clínica Odontológica Integrada",
     "category": "Dentista",
     "phone": "+554635241010",
-    "address": "Rua Ponta Grossa, 120 - Vila Nova",
-    "longDescription": "Implantes e estética dental avançada em Beltrão.",
+    "address": "Rua das Flores, 120",
+    "longDescription": "Implantes e estética dental avançada. Atendimento em toda a região.",
     "latitude": -26.0820,
     "longitude": -53.0450,
-    "ownerEmail": "vargas@odonto.com",
-    "ownerName": "Dr. Luiz Vargas"
+    "ownerEmail": "contato@clinica-odonto.com",
+    "ownerName": "Dr. Responsável"
   },
   {
-    "name": "Clínica Médica Beltrão",
+    "name": "Centro Médico Multidisciplinar",
     "category": "Médico",
     "phone": "+554635234455",
-    "address": "Rua Antonina, 450 - Centro",
-    "longDescription": "Pediatria e Ginecologia com agendamento online.",
+    "address": "Rua da Paz, 450 - Centro",
+    "longDescription": "Pediatria e Ginecologia com agendamento online. Atendimento em toda a região.",
     "latitude": -26.0762,
     "longitude": -53.0488,
-    "ownerEmail": "agendamento@clinicabeltrao.com",
-    "ownerName": "Dra. Marcia Helena"
+    "ownerEmail": "agendamento@centro-medico.com",
+    "ownerName": "Equipe Médica"
   },
   {
-    "name": "NutreBem Beltrão",
+    "name": "Consultório de Nutrição Especializada",
     "category": "Nutricionista",
     "phone": "+5546955550005",
-    "address": "Rua Curitiba, 10 - Alvorada",
-    "longDescription": "Emagrecimento saudável e nutrição esportiva.",
+    "address": "Rua das Palmeiras, 10",
+    "longDescription": "Emagrecimento saudável e nutrição esportiva. Atendimento em toda a região.",
     "latitude": -26.0880,
     "longitude": -53.0610,
-    "ownerEmail": "nutre@bemfb.com",
-    "ownerName": "Fernanda Silva"
+    "ownerEmail": "nutricao@exemplo.com",
+    "ownerName": "Nutricionista"
   },
   {
-    "name": "Espaço Mente - Psicologia",
+    "name": "Clínica de Psicologia e Bem-Estar",
     "category": "Psicólogo",
     "phone": "+5546966660006",
     "address": "Rua São Paulo, 200 - Centro",
-    "longDescription": "Psicoterapia para adultos e casais.",
+    "longDescription": "Psicoterapia para adultos e casais. Atendimento em toda a região.",
     "latitude": -26.0745,
     "longitude": -53.0555,
-    "ownerEmail": "rodrigo.psi@email.com",
-    "ownerName": "Rodrigo Mendes"
+    "ownerEmail": "psicologia@exemplo.com",
+    "ownerName": "Psicólogo Responsável"
   },
   {
-    "name": "Marcenaria Concórdia",
+    "name": "Móveis Planejados e Marcenaria",
     "category": "Marceneiro",
     "phone": "+5546977770007",
-    "address": "Rua Maringá, 55 - Industrial",
-    "longDescription": "Móveis planejados de alto padrão.",
+    "address": "Rua Industrial, 55",
+    "longDescription": "Móveis planejados de alto padrão. Atendimento em toda a região.",
     "latitude": -26.0650,
     "longitude": -53.0400,
-    "ownerEmail": "concordia@moveis.com",
-    "ownerName": "Altair Marcenaria"
+    "ownerEmail": "marcenaria@exemplo.com",
+    "ownerName": "Marceneiro Especializado"
   },
   {
-    "name": "Lava Car Capanema",
+    "name": "Centro de Estética Automotiva",
     "category": "Lava Car",
     "phone": "+5546988880008",
-    "address": "Rua Porto Alegre, 1000 - Pinheirinho",
-    "longDescription": "Lavagem simples e detalhada. Higienização interna.",
+    "address": "Rua das Acácias, 1000",
+    "longDescription": "Lavagem simples e detalhada. Higienização interna. Atendimento em toda a região.",
     "latitude": -26.0950,
     "longitude": -53.0300,
-    "ownerEmail": "lavacar@capanema.com",
-    "ownerName": "Tiago Oliveira",
+    "ownerEmail": "estetica@auto.com",
+    "ownerName": "Equipe de Estética",
     "offers": [
       {
-        "title": "Promo Terça-Feira",
-        "description": "20% de desconto para lavagem completa às terças.",
+        "title": "Centro de Estética Automotiva",
+        "description": "20% de desconto para lavagem completa às terças. Atendimento em toda a região.",
         "rewardPoints": 80
       }
     ]
   },
   {
-    "name": "Mecânica do Beto",
+    "name": "Mecânica Automotiva Especializada",
     "category": "Mecânica",
     "phone": "+554635241122",
-    "address": "Av. Natalino Faust, 300 - Luther King",
-    "longDescription": "Suspensão, freios e motor. Diagnóstico por scanner.",
+    "address": "Av. do Comércio, 300",
+    "longDescription": "Suspensão, freios e motor. Diagnóstico por scanner. Atendimento em toda a região.",
     "latitude": -26.0700,
     "longitude": -53.0600,
-    "ownerEmail": "beto.mecanica@email.com",
-    "ownerName": "Roberto Carlos"
+    "ownerEmail": "mecanica@exemplo.com",
+    "ownerName": "Equipe Técnica"
   },
   {
-    "name": "Chapeação Beltrãoense",
+    "name": "Centro de Chapeação e Pintura",
     "category": "Chapeador",
     "phone": "+554635243344",
-    "address": "Rua União da Vitória, 40 - Miniguaçu",
-    "longDescription": "Pintura em estufa e recuperação de batidas.",
+    "address": "Rua União, 40",
+    "longDescription": "Pintura em estufa e recuperação de batidas. Atendimento em toda a região.",
     "latitude": -26.0850,
     "longitude": -53.0700,
-    "ownerEmail": "chapeacao@fb.com",
-    "ownerName": "Ivan Chapeador"
+    "ownerEmail": "chapeacao@exemplo.com",
+    "ownerName": "Técnico Especialista"
   },
   {
-    "name": "Farmácia do Povo FB",
+    "name": "Farmácia e Drogaria 24h",
     "category": "Farmácia",
     "phone": "+554635245566",
-    "address": "Rua Ponta Grossa, 500 - Centro",
-    "longDescription": "Entrega grátis em todo o perímetro urbano.",
+    "address": "Rua das Rosas, 500 - Centro",
+    "longDescription": "Entrega grátis em todo o perímetro urbano. Atendimento em toda a região.",
     "latitude": -26.0780,
     "longitude": -53.0500,
-    "ownerEmail": "farma@povo.com",
-    "ownerName": "Farmacêutico Paulo"
+    "ownerEmail": "farmacia@exemplo.com",
+    "ownerName": "Farmacêutico de Plantão"
   },
   {
-    "name": "Pintura Sudoeste",
+    "name": "Pintura e Acabamentos Finos",
     "category": "Pintor",
     "phone": "+5546911112222",
-    "address": "Rua Romeu Lauro Werlang, 12 - Centro",
-    "longDescription": "Pintura residencial com fino acabamento.",
+    "address": "Rua Nova, 12 - Centro",
+    "longDescription": "Pintura residencial com fino acabamento. Atendimento em toda a região.",
     "latitude": -26.0770,
     "longitude": -53.0520,
-    "ownerEmail": "pinturas@sudoeste.com",
-    "ownerName": "João Pintor"
+    "ownerEmail": "pintura@exemplo.com",
+    "ownerName": "Pintor Profissional"
   },
   {
-    "name": "Mestre de Obras Beltrão",
+    "name": "Construções e Reformas em Geral",
     "category": "Pedreiros",
     "phone": "+5546933334444",
-    "address": "Rua Porto Alegre, 50 - Vila Nova",
-    "longDescription": "Reformas e construções do zero. Equipe qualificada.",
+    "address": "Rua Safira, 50",
+    "longDescription": "Reformas e construções do zero. Equipe qualificada. Atendimento em toda a região.",
     "latitude": -26.0835,
     "longitude": -53.0440,
-    "ownerEmail": "obras@beltrao.com",
-    "ownerName": "Seu Manoel"
+    "ownerEmail": "obras@exemplo.com",
+    "ownerName": "Mestre de Obras"
   }
 ];
 

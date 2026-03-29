@@ -141,7 +141,7 @@ export function EmpresaForm({ initialData, empresaId }: EmpresaFormProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Nome da Empresa</Label>
-                  <Input {...register('name')} placeholder="Ex: Salão Beleza Pura" className="input-dark h-11" />
+                  <Input {...register('name')} placeholder="Ex: Nome da Empresa" className="input-dark h-11" />
                   {errors.name && <p className="text-red-400 text-xs">{errors.name.message}</p>}
                 </div>
                 <div className="space-y-2">
@@ -153,7 +153,7 @@ export function EmpresaForm({ initialData, empresaId }: EmpresaFormProps) {
 
               <div className="space-y-2">
                 <Label>Descrição Curta (Oferta)</Label>
-                <Input {...register('shortDescription')} placeholder="Ex: Corte e Hidratação Neon" className="input-dark h-11" />
+                <Input {...register('shortDescription')} placeholder="Ex: Título da Oferta Especial" className="input-dark h-11" />
                 {errors.shortDescription && <p className="text-red-400 text-xs">{errors.shortDescription.message}</p>}
               </div>
 
