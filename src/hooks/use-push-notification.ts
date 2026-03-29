@@ -24,11 +24,17 @@ export function usePushNotification() {
   useEffect(() => {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       setIsSupported(true);
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.pushManager.getSubscription().then((sub) => {
-          setSubscription(sub);
-          setLoading(false);
-        });
+      // Ensure the Service Worker is registered BEFORE trying to get subscription
+      navigator.serviceWorker.register('/sw.js').then((registration) => {
+        return registration.pushManager.getSubscription();
+      })
+      .then((sub) => {
+        setSubscription(sub);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Service Worker Registration Error:', err);
+        setLoading(false);
       });
     } else {
       setLoading(false);

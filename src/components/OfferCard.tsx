@@ -14,7 +14,7 @@ export function OfferCard({ offer, variant = 'grid', onClick }: OfferCardProps) 
   const fallbackImage = `https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&auto=format&fit=crop&q=80`;
   const imageUrl = offer.imageUrl || fallbackImage;
   const categoryMatch = offer.description?.match(/^([^\|]+)\|/);
-  const tag = categoryMatch ? categoryMatch[1].trim() : 'Premium';
+  const tag = offer.category || (categoryMatch ? categoryMatch[1].trim() : 'Destaque');
   const descText = offer.description ? offer.description.replace(/^[^\|]+\|\s*/g, '').split(' | ')[0] : 'Oferta especial para você.';
 
   if (variant === 'list') {
