@@ -73,20 +73,17 @@ export const createEmpresaAction = authenticatedAction(
 
 // ── R ── Read (Busca Múltipla & Por ID)
 export async function getAdminEmpresas() {
-  const allOffers = await db.select({
-    offerInfo: offers,
-    businessInfo: businesses
-  })
-  .from(offers)
-  .innerJoin(businesses, eq(offers.businessId, businesses.id))
+  .from(businesses)
+  .leftJoin(offers, eq(offers.businessId, businesses.id))
   .orderBy(businesses.name);
 
   return allOffers.map(row => ({
-    id: row.offerInfo.id, // Offer ID is our primary key for editing
+    id: row.offerInfo?.id || `no-offer-${row.businessInfo.id}`, // Fallback if no offer exists
     businessName: row.businessInfo.name,
     category: row.businessInfo.category,
-    price: row.offerInfo.rewardPoints,
-    createdAt: row.offerInfo.createdAt,
+    price: row.offerInfo?.rewardPoints || 0,
+    createdAt: row.offerInfo?.createdAt || row.businessInfo.createdAt,
+    hasOffer: !!row.offerInfo
   }));
 }
 
