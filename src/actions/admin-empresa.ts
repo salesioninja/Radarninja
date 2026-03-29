@@ -71,8 +71,11 @@ export const createEmpresaAction = authenticatedAction(
 );
 
 
-// ── R ── Read (Busca Múltipla & Por ID)
 export async function getAdminEmpresas() {
+  const allOffers = await db.select({
+    offerInfo: offers,
+    businessInfo: businesses
+  })
   .from(businesses)
   .leftJoin(offers, eq(offers.businessId, businesses.id))
   .orderBy(businesses.name);
